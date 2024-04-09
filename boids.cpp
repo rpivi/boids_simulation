@@ -7,8 +7,6 @@ struct two_d {
   double y;
 };
 
-// ciao prova github
-
 class Boid {
  private:
   two_d position_;
