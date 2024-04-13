@@ -1,12 +1,21 @@
 #include <cassert>
 #include <cmath>
+#include <random>
 #include <vector>
 
+// random generation of number
+////////////////////////////////////////////////////////////////////////////////////////////
+std::default_random_engine eng;
+std::uniform_int_distribution<> roll_dice(1, 100);
+
+// two dimensional rappresewntation
+////////////////////////////////////////////////////////////////////////////////////////////
 struct two_d {
   double x;
   double y;
 };
 
+// overloading operator
 two_d operator+(two_d const& a, two_d const& b) {
   return two_d{a.x + b.x, a.y + b.y};
 }
@@ -14,13 +23,17 @@ two_d operator*(two_d const& a, auto const& b) {
   return two_d{a.x * b, a.y * b};
 }
 
+// Boid
+// //////////////////////////////////////////////////////////////////////////////////////////
 class Boid {
  private:
   two_d position_;
   two_d velocity_;
 
  public:
-  Boid(two_d p, two_d v) : position_{p}, velocity_{v} {}
+  Boid()  // random number by default
+      : position_{roll_dice(eng), roll_dice(eng)},
+        velocity_{roll_dice(eng), roll_dice(eng)} {}
 
   two_d p() const { return position_; }
   two_d v() const { return velocity_; }
@@ -38,15 +51,17 @@ class Boid {
 
   two_d update_p(double delta_t) {
     assert(delta_t > 0);
-    // delta_t deve essere positivo
     position_ = position_ + velocity_ * delta_t;
   }
 };
 
+// Main
+/////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
+  int num_boids;
+  std::vector<Boid> flock;
 
-std::vector<Boid> flock;
-
-
-
+  for (int i = 0; i < num_boids; ++i) {
+    flock.push_back(Boid());
+  }
 }
