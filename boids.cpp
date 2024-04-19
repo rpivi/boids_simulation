@@ -72,7 +72,6 @@ int main() {
   for (int i = 0; i <= num_boids; ++i) {
     flock.push_back(Boid());
   }
-
   for (int row = 0; row < num_boids; ++row)
     for (int col = 0; col < num_boids; ++col) {
       if (flock[row].near(flock[col], radius)) {
