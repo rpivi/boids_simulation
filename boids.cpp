@@ -1,3 +1,4 @@
+#include <SFML/Graphics.hpp>
 #include <array>
 #include <cassert>
 #include <cmath>
@@ -7,7 +8,7 @@
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
 std::default_random_engine eng;
-std::uniform_int_distribution<> roll_dice(1, 100);
+std::uniform_int_distribution<> roll_dice(100, 800);
 
 // two dimensional rappresentation
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -63,12 +64,12 @@ class Boid {
 // Main
 /////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
-  double radius{45};
-  int num_boids{5};
+  double radius{50};
+  int num_boids{500};
   std::vector<Boid> flock;
   bool info_near[num_boids][num_boids];
 
-  for (int i = 0; i < num_boids; ++i) {
+  for (int i = 0; i <= num_boids; ++i) {
     flock.push_back(Boid());
   }
 
@@ -80,4 +81,33 @@ int main() {
         (info_near[row][col] = false);
       std::cout << info_near[row][col];
     }
+
+  sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
+  window.setFramerateLimit(30);
+  // framerate per non avere un video troppo veloce
+
+  while (window.isOpen()) {
+    sf::Event event;
+    while (window.pollEvent(event)) {
+      if (event.type == sf::Event::Closed) {
+        window.close();
+      }
+    }
+
+    window.clear();
+
+    for (auto& boid : flock) {
+      // Creazione del cerchio per rappresentare un boid
+      sf::CircleShape circle(2);
+
+      // Impostazione della posizione del cerchio sulle coordinate del boid
+      circle.setPosition(boid.p().x, boid.p().y);
+
+      // Impostazione del colore del cerchio
+      circle.setFillColor(sf::Color::Blue);
+      window.draw(circle);
+    }
+
+    window.display();
+  }
 }
