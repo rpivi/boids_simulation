@@ -81,6 +81,8 @@ int main() {
       std::cout << info_near[row][col];
     }
 
+  // graphics
+  /////////////////////////////////////////////////////////////////////////////////////////////////////////
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
   window.setFramerateLimit(30);
   // framerate per non avere un video troppo veloce
