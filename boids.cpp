@@ -9,7 +9,7 @@
 ///////////////////////////////////////////////////////////////////////////////////////////
 const int num_boids{500};
 const double radius{50};
-const double s{0.999999};
+const double s{0.9999};
 const double delta{1};
 const double frame{60};
 
