@@ -5,6 +5,14 @@
 #include <iostream>
 #include <random>
 
+// constant value
+///////////////////////////////////////////////////////////////////////////////////////////
+const int num_boids{500};
+const double radius{50};
+const double s{0.999999};
+const double delta{1};
+const double frame{60};
+
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
 std::default_random_engine eng;
@@ -35,12 +43,16 @@ class Boid {
  public:
   Boid()  // random number by default
       : position_{roll_dice(eng), roll_dice(eng)},
-        velocity_{roll_dice(eng), roll_dice(eng)} {}
+        velocity_{roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1) / 400,
+                  roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1) / 400} {}
 
-  two_d p() const { return position_; }
-  two_d v() const { return velocity_; }
+  two_d get_p() const { return position_; }
+  two_d get_v() const { return velocity_; }
 
-  bool near(Boid const& other, double radius) {
+  bool near(Boid const& other, double radius) const {
+    if (position_.x == other.position_.x && position_.y == other.position_.y) {
+      return false;
+    }
     if (std::sqrt(pow(position_.x - other.position_.x, 2)) +
             pow(position_.y - other.position_.y, 2) <=
         radius) {
@@ -48,6 +60,7 @@ class Boid {
     } else
       return false;
   }
+
   void update_v(two_d const& v1, two_d const& v2, two_d const& v3) {
     velocity_ = velocity_ + v1 + v2 + v3;
   }
@@ -57,34 +70,33 @@ class Boid {
     position_ = position_ + velocity_ * delta_t;
   }
 };
-
-// le 3 leggi
+// 3 laws
 /////////////////////////////////////////////////////////////////////////////////////////////
+two_d separation(Boid const& bird, std::vector<Boid> const& flock,
+                 double const& s) {
+  two_d v1{0, 0};
+  for (auto& b : flock) {
+    if (bird.near(b, radius)) {
+      v1.x = (bird.get_p().x - b.get_p().x) + v1.x;
+      v1.y = (bird.get_p().y - b.get_p().y) + v1.y;
+    }
+  }
+  return v1 * (-s);
+}
 
 // Main
 /////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
-  double radius{50};
-  int num_boids{500};
   std::vector<Boid> flock;
-  bool info_near[num_boids][num_boids];
 
-  for (int i = 0; i <= num_boids; ++i) {
+  for (int i = 0; i < num_boids; ++i) {
     flock.push_back(Boid());
   }
-  for (int row = 0; row < num_boids; ++row)
-    for (int col = 0; col < num_boids; ++col) {
-      if (flock[row].near(flock[col], radius)) {
-        info_near[row][col] = true;
-      } else
-        (info_near[row][col] = false);
-      std::cout << info_near[row][col];
-    }
 
   // graphics
   /////////////////////////////////////////////////////////////////////////////////////////////////////////
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
-  window.setFramerateLimit(30);
+  window.setFramerateLimit(frame);
   // framerate per non avere un video troppo veloce
 
   while (window.isOpen()) {
@@ -101,8 +113,11 @@ int main() {
       // Creazione del cerchio per rappresentare un boid
       sf::CircleShape circle(2);
 
+      boid.update_v(separation(boid, flock, s), {0, 0}, {0, 0});
+      boid.update_p(delta);
+
       // Impostazione della posizione del cerchio sulle coordinate del boid
-      circle.setPosition(boid.p().x, boid.p().y);
+      circle.setPosition(boid.get_p().x, boid.get_p().y);
 
       // Impostazione del colore del cerchio
       circle.setFillColor(sf::Color::Blue);
