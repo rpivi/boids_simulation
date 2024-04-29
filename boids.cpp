@@ -164,7 +164,6 @@ int main() {
     for (auto& boid : flock) {
       // Creazione del cerchio per rappresentare un boid
       sf::CircleShape circle(2);
-
       boid.update_v(separation(boid, flock, s), alignment(boid, flock, a),
                     cohesion(boid, flock, c));
       boid.update_p(delta);
