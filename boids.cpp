@@ -8,10 +8,10 @@
 // constant value
 ///////////////////////////////////////////////////////////////////////////////////////////
 const int num_boids{500};
-const double radius{50};
-const double s{0.9999};
-const double delta{1};
+const double radius{20};
+const double s{1.};
 const double frame{60};
+const double delta{1.};
 
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -43,8 +43,8 @@ class Boid {
  public:
   Boid()  // random number by default
       : position_{roll_dice(eng), roll_dice(eng)},
-        velocity_{roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1) / 400,
-                  roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1) / 400} {}
+        velocity_{roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1),
+                  roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1)} {}
 
   two_d get_p() const { return position_; }
   two_d get_v() const { return velocity_; }
