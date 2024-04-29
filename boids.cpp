@@ -7,18 +7,19 @@
 
 // constant value
 ///////////////////////////////////////////////////////////////////////////////////////////
-const int num_boids{500};
-const double radius{25};
-const double s{0.5};
-const double a{1.};
-const double c{0.5};
+const int num_boids{50};
+const double r{50};
+const double radius_separation{r / 2};
+const double s{1.};
+const double a{0.2};
+const double c{0.1};
 const double frame{30};
-const double delta{1.};
+const double delta{1 / frame};
 
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
 std::default_random_engine eng;
-std::uniform_real_distribution<> dis(100., 800.0);
+std::uniform_real_distribution<> dis(100., 300.0);
 std::uniform_real_distribution<> dis2(-1., 1.);
 
 // two dimensional rappresentation
@@ -57,9 +58,8 @@ class Boid {
     if (position_.x == other.position_.x && position_.y == other.position_.y) {
       return false;
     }
-    if (std::sqrt(pow(position_.x - other.position_.x, 2)) +
-            pow(position_.y - other.position_.y, 2) <=
-        radius) {
+    if (std::sqrt(pow(position_.x - other.position_.x, 2) +
+                  pow(position_.y - other.position_.y, 2)) <= radius) {
       return true;
     } else
       return false;
@@ -77,20 +77,17 @@ class Boid {
 
 // center of mass
 ////////////////////////////////////////////////////////////////////////////////////////////
-two_d center_mass(std::vector<Boid> const& flock, Boid bird) {
+two_d center_mass(std::vector<Boid> const& flock, Boid const& bird) {
   two_d x_c{0., 0.};
   int n{0};
   for (auto& other_b : flock) {
-    if (bird.get_p().x != other_b.get_p().x &&
-        bird.get_p().y != other_b.get_p().y) {
-      if (bird.near(other_b, radius)) {
-        ++n;
-        x_c = x_c + other_b.get_p();
-      }
+    if (bird.near(other_b, r)) {
+      ++n;
+      x_c = x_c + other_b.get_p();
     }
   }
-  if (n != 1) {
-    return x_c * (1 / (n - 1));
+  if (n > 1) {
+    return x_c * (1. / (n - 1));
   } else {
     return {0., 0.};
   }
@@ -102,7 +99,7 @@ two_d separation(Boid const& bird, std::vector<Boid> const& flock,
                  double const& s) {
   two_d v1{0., 0.};
   for (auto& other_b : flock) {
-    if (bird.near(other_b, radius)) {
+    if (bird.near(other_b, radius_separation)) {
       v1 = (other_b.get_p() - bird.get_p()) + v1;
     }
   }
@@ -113,18 +110,18 @@ two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
   two_d v2{0., 0.};
   int n{0};
   for (auto& other_b : flock) {
-    if (bird.near(other_b, radius)) {
+    if (bird.near(other_b, r)) {
       ++n;
-      v2 = (other_b.get_v() - bird.get_v()) + v2;
+      v2 = other_b.get_v() + v2;
     }
   }
-  if (n != 1) {
-    return v2 * (a / (n - 1));
+  if (n > 1) {
+    v2 = v2 * (1 / (n - 1));
+    return (v2 - bird.get_v()) * a;
   } else {
     return {0., 0.};
   }
 }
-
 two_d cohesion(Boid const& bird, std::vector<Boid> const& flock,
                double const& c) {
   two_d v3{0., 0.};
@@ -132,7 +129,6 @@ two_d cohesion(Boid const& bird, std::vector<Boid> const& flock,
   if (x_c.x == 0 && x_c.y == 0) {
     return v3;
   }
-
   v3 = (x_c - bird.get_p()) * c;
   return v3;
 }
