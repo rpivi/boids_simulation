@@ -176,7 +176,6 @@ int main() {
       circle.setFillColor(sf::Color::Blue);
       window.draw(circle);
     }
-
     window.display();
   }
 }
