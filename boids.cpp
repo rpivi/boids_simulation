@@ -8,28 +8,34 @@
 // constant value
 ///////////////////////////////////////////////////////////////////////////////////////////
 const int num_boids{500};
-const double radius{20};
-const double s{1.};
-const double frame{60};
+const double radius{25};
+const double s{0.5};
+const double a{1.};
+const double c{0.5};
+const double frame{30};
 const double delta{1.};
 
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
 std::default_random_engine eng;
-std::uniform_int_distribution<> roll_dice(100, 800);
+std::uniform_real_distribution<> dis(100., 800.0);
+std::uniform_real_distribution<> dis2(-1., 1.);
 
 // two dimensional rappresentation
 ////////////////////////////////////////////////////////////////////////////////////////////
 struct two_d {
-  int x;
-  int y;
+  double x;
+  double y;
 };
 
 // overloading operator
 two_d operator+(two_d const& a, two_d const& b) {
   return two_d{a.x + b.x, a.y + b.y};
 }
-two_d operator*(two_d const& a, int const& b) {
+two_d operator-(two_d const& a, two_d const& b) {
+  return two_d{a.x - b.x, a.y - b.y};
+}
+two_d operator*(two_d const& a, double const& b) {
   return two_d{a.x * b, a.y * b};
 }
 
@@ -42,9 +48,7 @@ class Boid {
 
  public:
   Boid()  // random number by default
-      : position_{roll_dice(eng), roll_dice(eng)},
-        velocity_{roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1),
-                  roll_dice(eng) * (roll_dice(eng) % 2 == 0 ? 1 : -1)} {}
+      : position_{dis(eng), dis(eng)}, velocity_{dis2(eng), dis2(eng)} {}
 
   two_d get_p() const { return position_; }
   two_d get_v() const { return velocity_; }
@@ -70,20 +74,68 @@ class Boid {
     position_ = position_ + velocity_ * delta_t;
   }
 };
+
+// center of mass
+////////////////////////////////////////////////////////////////////////////////////////////
+two_d center_mass(std::vector<Boid> const& flock, Boid bird) {
+  two_d x_c{0., 0.};
+  int n{0};
+  for (auto& other_b : flock) {
+    if (bird.get_p().x != other_b.get_p().x &&
+        bird.get_p().y != other_b.get_p().y) {
+      if (bird.near(other_b, radius)) {
+        ++n;
+        x_c = x_c + other_b.get_p();
+      }
+    }
+  }
+  if (n != 1) {
+    return x_c * (1 / (n - 1));
+  } else {
+    return {0., 0.};
+  }
+}
+
 // 3 laws
 /////////////////////////////////////////////////////////////////////////////////////////////
 two_d separation(Boid const& bird, std::vector<Boid> const& flock,
                  double const& s) {
-  two_d v1{0, 0};
-  for (auto& b : flock) {
-    if (bird.near(b, radius)) {
-      v1.x = (bird.get_p().x - b.get_p().x) + v1.x;
-      v1.y = (bird.get_p().y - b.get_p().y) + v1.y;
+  two_d v1{0., 0.};
+  for (auto& other_b : flock) {
+    if (bird.near(other_b, radius)) {
+      v1 = (other_b.get_p() - bird.get_p()) + v1;
     }
   }
   return v1 * (-s);
 }
+two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
+                double const& a) {
+  two_d v2{0., 0.};
+  int n{0};
+  for (auto& other_b : flock) {
+    if (bird.near(other_b, radius)) {
+      ++n;
+      v2 = (other_b.get_v() - bird.get_v()) + v2;
+    }
+  }
+  if (n != 1) {
+    return v2 * (a / (n - 1));
+  } else {
+    return {0., 0.};
+  }
+}
 
+two_d cohesion(Boid const& bird, std::vector<Boid> const& flock,
+               double const& c) {
+  two_d v3{0., 0.};
+  two_d x_c = center_mass(flock, bird);
+  if (x_c.x == 0 && x_c.y == 0) {
+    return v3;
+  }
+
+  v3 = (x_c - bird.get_p()) * c;
+  return v3;
+}
 // Main
 /////////////////////////////////////////////////////////////////////////////////////////////
 int main() {
@@ -113,7 +165,8 @@ int main() {
       // Creazione del cerchio per rappresentare un boid
       sf::CircleShape circle(2);
 
-      boid.update_v(separation(boid, flock, s), {0, 0}, {0, 0});
+      boid.update_v(separation(boid, flock, s), alignment(boid, flock, a),
+                    cohesion(boid, flock, c));
       boid.update_p(delta);
 
       // Impostazione della posizione del cerchio sulle coordinate del boid
