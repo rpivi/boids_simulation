@@ -7,19 +7,19 @@
 
 // constant value
 ///////////////////////////////////////////////////////////////////////////////////////////
-const int num_boids{50};
+const int num_boids{130};
 const double r{50};
-const double radius_separation{r / 2};
-const double s{1.};
-const double a{0.2};
-const double c{0.1};
-const double frame{30};
+const double radius_separation{r / 4};
+const double s{0.5};
+const double a{0.01};
+const double c{0.01};
+const double frame{60};
 const double delta{1 / frame};
 
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
 std::default_random_engine eng;
-std::uniform_real_distribution<> dis(100., 300.0);
+std::uniform_real_distribution<> dis(100., 500.0);
 std::uniform_real_distribution<> dis2(-1., 1.);
 
 // two dimensional rappresentation
@@ -87,10 +87,9 @@ two_d center_mass(std::vector<Boid> const& flock, Boid const& bird) {
     }
   }
   if (n > 1) {
-    return x_c * (1. / (n - 1));
-  } else {
-    return {0., 0.};
+    return x_c * (1. / (n));
   }
+  return x_c;
 }
 
 // 3 laws
@@ -116,7 +115,7 @@ two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
     }
   }
   if (n > 1) {
-    v2 = v2 * (1 / (n - 1));
+    v2 = v2 * (1 / (n));
     return (v2 - bird.get_v()) * a;
   } else {
     return {0., 0.};
