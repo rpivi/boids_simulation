@@ -7,20 +7,29 @@
 
 // constant value
 ///////////////////////////////////////////////////////////////////////////////////////////
-const int num_boids{130};
-const double r{50};
-const double radius_separation{r / 4};
-const double s{0.5};
-const double a{0.01};
-const double c{0.01};
+const int num_boids{250};
 const double frame{60};
 const double delta{1 / frame};
 
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
 std::default_random_engine eng;
-std::uniform_real_distribution<> dis(100., 500.0);
+std::uniform_real_distribution<> dis(250., 600.0);
 std::uniform_real_distribution<> dis2(-1., 1.);
+
+// get parameters
+///////////////////////////////////////////////////////////////////////////////////////////
+
+void set_parameters(double& r, double& s, double& a, double& c) {
+  std::cout << "\n Insert the parameters \n the radius: ";
+  std::cin >> r;
+  std::cout << "\n the separation parameter: ";
+  std::cin >> s;
+  std::cout << "\n the allignement parameter: ";
+  std::cin >> a;
+  std::cout << "\n the cohesion parameter: ";
+  std::cin >> c;
+}
 
 // two dimensional rappresentation
 ////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,7 +86,8 @@ class Boid {
 
 // center of mass
 ////////////////////////////////////////////////////////////////////////////////////////////
-two_d center_mass(std::vector<Boid> const& flock, Boid const& bird) {
+two_d center_mass(std::vector<Boid> const& flock, Boid const& bird,
+                  double const& r) {
   two_d x_c{0., 0.};
   int n{0};
   for (auto& other_b : flock) {
@@ -95,17 +105,17 @@ two_d center_mass(std::vector<Boid> const& flock, Boid const& bird) {
 // 3 laws
 /////////////////////////////////////////////////////////////////////////////////////////////
 two_d separation(Boid const& bird, std::vector<Boid> const& flock,
-                 double const& s) {
+                 double const& s, double const& r_separation) {
   two_d v1{0., 0.};
   for (auto& other_b : flock) {
-    if (bird.near(other_b, radius_separation)) {
+    if (bird.near(other_b, r_separation)) {
       v1 = (other_b.get_p() - bird.get_p()) + v1;
     }
   }
   return v1 * (-s);
 }
 two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
-                double const& a) {
+                double const& a, double const& r) {
   two_d v2{0., 0.};
   int n{0};
   for (auto& other_b : flock) {
@@ -122,29 +132,35 @@ two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
   }
 }
 two_d cohesion(Boid const& bird, std::vector<Boid> const& flock,
-               double const& c) {
+               double const& c, double const& r) {
   two_d v3{0., 0.};
-  two_d x_c = center_mass(flock, bird);
+  two_d x_c = center_mass(flock, bird, r);
   if (x_c.x == 0 && x_c.y == 0) {
     return v3;
   }
   v3 = (x_c - bird.get_p()) * c;
   return v3;
 }
-// Main
-/////////////////////////////////////////////////////////////////////////////////////////////
-int main() {
-  std::vector<Boid> flock;
 
+// Main
+int main() {
+  double r{0.};
+  double s{0.};
+  double a{0.};
+  double c{0.};
+  set_parameters(r, s, a, c);
+  double r_separation{r / 8};
+
+  // creation of the flock
+  std::vector<Boid> flock;
   for (int i = 0; i < num_boids; ++i) {
     flock.push_back(Boid());
   }
 
   // graphics
-  /////////////////////////////////////////////////////////////////////////////////////////////////////////
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
   window.setFramerateLimit(frame);
-  // framerate per non avere un video troppo veloce
+  // setting the framerate
 
   while (window.isOpen()) {
     sf::Event event;
@@ -157,16 +173,16 @@ int main() {
     window.clear();
 
     for (auto& boid : flock) {
-      // Creazione del cerchio per rappresentare un boid
+      // The circle rappresent a boid
       sf::CircleShape circle(2);
-      boid.update_v(separation(boid, flock, s), alignment(boid, flock, a),
-                    cohesion(boid, flock, c));
+      boid.update_v(separation(boid, flock, s, r_separation),
+                    alignment(boid, flock, a, r), cohesion(boid, flock, c, r));
       boid.update_p(delta);
 
-      // Impostazione della posizione del cerchio sulle coordinate del boid
+      // Setting the position of the circle
       circle.setPosition(boid.get_p().x, boid.get_p().y);
 
-      // Impostazione del colore del cerchio
+      // Boids are blue for me
       circle.setFillColor(sf::Color::Blue);
       window.draw(circle);
     }
