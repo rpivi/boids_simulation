@@ -87,15 +87,15 @@ class Boid {
     position_ = position_ + velocity_ * delta_t;
   }
 
-  void borders(Boid& b) {
-    if (b.position_.x < 0) {
-      b.position_.x += 900;
-    } else if (b.position_.y < 0) {
-      b.position_.y += 900;
-    } else if (b.position_.x > 900) {
-      b.position_.x -= 900;
-    } else if (b.position_.y > 900) {
-      b.position_.y -= 900;
+  void borders() {
+    if (position_.x < 0) {
+      position_.x += 900;
+    } else if (position_.y < 0) {
+      position_.y += 900;
+    } else if (position_.x > 900) {
+      position_.x -= 900;
+    } else if (position_.y > 900) {
+      position_.y -= 900;
     }
   }
 };
@@ -193,7 +193,7 @@ int main() {
       boid.update_v(separation(boid, flock, s, d_s),
                     alignment(boid, flock, a, d), cohesion(boid, flock, c, d));
       boid.update_p(delta);
-      boid.borders(boid);
+      boid.borders();
 
       // Setting the position of the circle
       circle.setPosition(boid.get_p().x, boid.get_p().y);
