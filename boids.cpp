@@ -42,7 +42,6 @@ struct two_d {
   double x;
   double y;
 };
-
 // overloading operator
 two_d operator+(two_d const& a, two_d const& b) {
   return two_d{a.x + b.x, a.y + b.y};
