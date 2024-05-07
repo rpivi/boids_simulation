@@ -125,7 +125,7 @@ two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
     }
   }
   if (n > 1) {
-    v2 = v2 * (1 / (n));
+    v2 = v2 * (1. / (n));
     return (v2 - bird.get_v()) * a;
   } else {
     return {0., 0.};
