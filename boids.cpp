@@ -174,7 +174,6 @@ int main() {
         window.close();
       }
     }
-
     window.clear();
 
     for (auto& boid : flock) {
