@@ -12,8 +12,9 @@ const double delta{1 / frame};
 
 // random generation of number
 ///////////////////////////////////////////////////////////////////////////////////////////
-std::default_random_engine eng;
-std::uniform_real_distribution<> dis(250., 600.0);
+std::random_device r;
+std::default_random_engine eng(r());
+std::uniform_real_distribution<> dis(250., 600.);
 std::uniform_real_distribution<> dis2(-1., 1.);
 
 // get parameters
