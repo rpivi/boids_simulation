@@ -187,7 +187,6 @@ int main() {
       }
     }
     window.clear();
-
     for (auto& boid : flock) {
       // The circle rappresent a boid
       sf::CircleShape circle(2);
