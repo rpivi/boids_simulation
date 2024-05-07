@@ -52,6 +52,7 @@ two_d operator-(two_d const& a, two_d const& b) {
 two_d operator*(two_d const& a, double const& b) {
   return two_d{a.x * b, a.y * b};
 }
+two_d operator/(two_d const& a, int b) { return two_d{a.x / b, a.y / b}; }
 
 // Boid
 // //////////////////////////////////////////////////////////////////////////////////////////
@@ -98,65 +99,66 @@ class Boid {
       position_.y -= 900;
     }
   }
-};
 
-// center of mass
-////////////////////////////////////////////////////////////////////////////////////////////
-two_d center_mass(std::vector<Boid> const& flock, Boid const& bird,
+  // center of mass
+  ////////////////////////////////////////////////////////////////////////////////////////////
+  two_d center_mass(std::vector<Boid> const& flock, double const& r) {
+    two_d x_c{0., 0.};
+    int n{0};
+    for (auto& other_b : flock) {
+      if (near(other_b, r)) {
+        ++n;
+        x_c = x_c + other_b.get_p();
+      }
+    }
+    if (n > 1) {
+      return x_c / n;
+    }
+    return x_c;
+  }
+
+  // 3 laws
+  /////////////////////////////////////////////////////////////////////////////////////////////
+  two_d separation(std::vector<Boid> const& flock, double const& s,
+                   double const& r_separation) {
+    two_d v1{0., 0.};
+    for (auto& other_b : flock) {
+      if (near(other_b, r_separation)) {
+        v1 = (other_b.get_p() - get_p()) + v1;
+      }
+    }
+    return v1 * (-s);
+  }
+
+  two_d alignment(std::vector<Boid> const& flock, double const& a,
                   double const& r) {
-  two_d x_c{0., 0.};
-  int n{0};
-  for (auto& other_b : flock) {
-    if (bird.near(other_b, r)) {
-      ++n;
-      x_c = x_c + other_b.get_p();
+    two_d v2{0., 0.};
+    int n{0};
+    for (auto& other_b : flock) {
+      if (near(other_b, r)) {
+        ++n;
+        v2 = other_b.get_v() + v2;
+      }
+    }
+    if (n > 1) {
+      v2 = v2 * n;
+      return (v2 - get_v()) * a;
+    } else {
+      return {0., 0.};
     }
   }
-  if (n > 1) {
-    return x_c * (1. / (n));
-  }
-  return x_c;
-}
 
-// 3 laws
-/////////////////////////////////////////////////////////////////////////////////////////////
-two_d separation(Boid const& bird, std::vector<Boid> const& flock,
-                 double const& s, double const& r_separation) {
-  two_d v1{0., 0.};
-  for (auto& other_b : flock) {
-    if (bird.near(other_b, r_separation)) {
-      v1 = (other_b.get_p() - bird.get_p()) + v1;
+  two_d cohesion(std::vector<Boid> const& flock, double const& c,
+                 double const& r) {
+    two_d v3{0., 0.};
+    two_d x_c = center_mass(flock, r);
+    if (x_c.x == 0 && x_c.y == 0) {
+      return v3;
     }
-  }
-  return v1 * (-s);
-}
-two_d alignment(Boid const& bird, std::vector<Boid> const& flock,
-                double const& a, double const& r) {
-  two_d v2{0., 0.};
-  int n{0};
-  for (auto& other_b : flock) {
-    if (bird.near(other_b, r)) {
-      ++n;
-      v2 = other_b.get_v() + v2;
-    }
-  }
-  if (n > 1) {
-    v2 = v2 * (1. / (n));
-    return (v2 - bird.get_v()) * a;
-  } else {
-    return {0., 0.};
-  }
-}
-two_d cohesion(Boid const& bird, std::vector<Boid> const& flock,
-               double const& c, double const& r) {
-  two_d v3{0., 0.};
-  two_d x_c = center_mass(flock, bird, r);
-  if (x_c.x == 0 && x_c.y == 0) {
+    v3 = (x_c - get_p()) * c;
     return v3;
   }
-  v3 = (x_c - bird.get_p()) * c;
-  return v3;
-}
+};
 
 // Main
 int main() {
@@ -190,8 +192,8 @@ int main() {
     for (auto& boid : flock) {
       // The circle rappresent a boid
       sf::CircleShape circle(2);
-      boid.update_v(separation(boid, flock, s, d_s),
-                    alignment(boid, flock, a, d), cohesion(boid, flock, c, d));
+      boid.update_v(boid.separation(flock, s, d_s), boid.alignment(flock, a, d),
+                    boid.cohesion(flock, c, d));
       boid.update_p(delta);
       boid.borders();
 
