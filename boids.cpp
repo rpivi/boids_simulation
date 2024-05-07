@@ -7,7 +7,6 @@
 
 // constant value
 ///////////////////////////////////////////////////////////////////////////////////////////
-const int num_boids{250};
 const double frame{60};
 const double delta{1 / frame};
 
@@ -20,9 +19,14 @@ std::uniform_real_distribution<> dis2(-1., 1.);
 // get parameters
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-void set_parameters(double& r, double& s, double& a, double& c) {
-  std::cout << "\n Insert the parameters \n the radius: ";
-  std::cin >> r;
+void set_parameters(double& num_boids, double& d, double& d_s, double& s,
+                    double& a, double& c) {
+  std::cout << "\n Insert the parameters \n the number of boids: ";
+  std::cin >> num_boids;
+  std::cout << "\n the near radius:";
+  std::cin >> d;
+  std::cout << "\n the separation radius: ";
+  std::cin >> d_s;
   std::cout << "\n the separation parameter: ";
   std::cin >> s;
   std::cout << "\n the allignement parameter: ";
@@ -144,12 +148,13 @@ two_d cohesion(Boid const& bird, std::vector<Boid> const& flock,
 
 // Main
 int main() {
-  double r{0.};
+  double num_boids{0.};
+  double d_s{0.};
+  double d{0.};
   double s{0.};
   double a{0.};
   double c{0.};
-  set_parameters(r, s, a, c);
-  double r_separation{r / 8};
+  set_parameters(num_boids, d, d_s, s, a, c);
 
   // creation of the flock
   std::vector<Boid> flock;
@@ -169,14 +174,13 @@ int main() {
         window.close();
       }
     }
-
     window.clear();
 
     for (auto& boid : flock) {
       // The circle rappresent a boid
       sf::CircleShape circle(2);
-      boid.update_v(separation(boid, flock, s, r_separation),
-                    alignment(boid, flock, a, r), cohesion(boid, flock, c, r));
+      boid.update_v(separation(boid, flock, s, d_s),
+                    alignment(boid, flock, a, d), cohesion(boid, flock, c, d));
       boid.update_p(delta);
 
       // Setting the position of the circle
