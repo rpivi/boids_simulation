@@ -192,6 +192,7 @@ int main() {
   double c{0.};
   set_parameters(num_boids, d, d_s, s, a, c);
 
+
   // creation of the flock
   std::vector<Boid> flock;
   for (int i = 0; i < num_boids; ++i) {
