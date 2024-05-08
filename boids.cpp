@@ -118,6 +118,7 @@ class Boid {
     return x_c;
   }
 
+
   // 3 laws
   /////////////////////////////////////////////////////////////////////////////////////////////
   /*two_d separation(std::vector<Boid> const& flock, double const& s,
