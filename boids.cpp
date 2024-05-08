@@ -188,10 +188,10 @@ int main() {
         window.close();
       }
     }
-    window.clear();
+    window.clear(sf::Color(135, 206, 250));
     for (auto& boid : flock) {
       // The circle rappresent a boid
-      sf::CircleShape circle(2);
+      sf::CircleShape circle(1);
       boid.update_v(boid.separation(flock, s, d_s), boid.alignment(flock, a, d),
                     boid.cohesion(flock, c, d));
       boid.update_p(delta);
