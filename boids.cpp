@@ -3,6 +3,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <numeric>
 #include <random>
 
 // constant value
@@ -119,7 +120,7 @@ class Boid {
 
   // 3 laws
   /////////////////////////////////////////////////////////////////////////////////////////////
-  two_d separation(std::vector<Boid> const& flock, double const& s,
+  /*two_d separation(std::vector<Boid> const& flock, double const& s,
                    double const& r_separation) {
     two_d v1{0., 0.};
     for (auto& other_b : flock) {
@@ -127,6 +128,27 @@ class Boid {
         v1 = (other_b.get_p() - get_p()) + v1;
       }
     }
+    return v1 * (-s);
+  }*/
+
+  two_d separation(std::vector<Boid> const& flock, double const& s,
+                   double const& r_separation) {
+    two_d v1{0., 0.};
+    /* std::vector<Boid> v;
+     for(auto& other_b: flock){
+       if (near(other_b, r_separation)){
+         v.push_back(other_b);
+       }
+     }*/
+    two_d v2{0.,0.,};
+    v1 = std::accumulate(
+        std::begin(flock), std::end(flock), v2, [=](two_d sum, Boid b) {
+          if (near(b, r_separation)) {
+            return sum+(b.get_p() - get_p()) ;
+          } else {
+            return v1;
+          }
+        });
     return v1 * (-s);
   }
 
