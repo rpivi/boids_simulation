@@ -25,7 +25,7 @@ void set_parameters(double& num_boids, double& d, double& d_s, double& s,
                     double& a, double& c) {
   std::cout << "\n Insert the parameters \n the number of boids: ";
   std::cin >> num_boids;
-  std::cout << "\n the near radius:";
+  std::cout << "\n the near radius: ";
   std::cin >> d;
   std::cout << "\n the separation radius: ";
   std::cin >> d_s;
@@ -226,7 +226,7 @@ int main() {
       circle.setPosition(boid.get_p().x, boid.get_p().y);
 
       // Boids are blue for me
-      circle.setFillColor(sf::Color::Blue);
+      circle.setFillColor(sf::Color::Black);
       window.draw(circle);
     }
     window.display();
