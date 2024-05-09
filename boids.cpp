@@ -132,6 +132,7 @@ class Boid {
     return v1 * (-s);
   }*/
 
+
   two_d separation(std::vector<Boid> const& flock, double const& s,
                    double const& r_separation) {
     two_d v1{0., 0.};
