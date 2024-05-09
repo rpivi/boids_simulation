@@ -55,6 +55,14 @@ two_d operator*(two_d const& a, double const& b) {
 }
 two_d operator/(two_d const& a, int b) { return two_d{a.x / b, a.y / b}; }
 
+//norm and distance function
+double norm(two_d const& p) { return std::hypot(p.x, p.y); }
+
+double distance(two_d const& p, two_d const& otherp) {
+  two_d difference = p - otherp;
+  return norm(difference);
+}
+
 // Boid
 // //////////////////////////////////////////////////////////////////////////////////////////
 class Boid {
