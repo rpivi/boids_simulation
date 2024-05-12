@@ -120,7 +120,8 @@ class Boid {
   two_d separation(std::vector<Boid> const& flock, double const& s,
                    double const& d_separation) {
     two_d v1{0., 0.};
-    v1 = std::accumulate(std::begin(flock), std::end(flock), v1,
+    two_d v_null{0., 0.};
+    v1 = std::accumulate(std::begin(flock), std::end(flock), v_null,
                          [&](two_d sum, const Boid other_b) {
                            if (near(other_b, d_separation)) {
                              return sum + (other_b.get_p() - get_p());
@@ -134,9 +135,10 @@ class Boid {
   two_d alignment(std::vector<Boid> const& flock, double const& a,
                   double const& d) {
     two_d v2{0., 0.};
+    two_d v_null{0., 0.};
     int n{0};
 
-    v2=std::accumulate(std::begin(flock), std::end(flock), v2,
+    v2=std::accumulate(std::begin(flock), std::end(flock), v_null,
                     [&](two_d sum, const Boid other_b) {
                       if (near(other_b, d)) {
                         ++n;
