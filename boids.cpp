@@ -51,7 +51,7 @@ double distance(two_d const& p, two_d const& otherp) {
 }
 
 // Boid
-// //////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
 class Boid {
  private:
   two_d position_;
@@ -136,7 +136,7 @@ class Boid {
     two_d v2{0., 0.};
     int n{0};
 
-    std::accumulate(std::begin(flock), std::end(flock), v2,
+    v2=std::accumulate(std::begin(flock), std::end(flock), v2,
                     [&](two_d sum, const Boid other_b) {
                       if (near(other_b, d)) {
                         ++n;
