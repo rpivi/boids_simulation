@@ -1,22 +1,9 @@
 #include <SFML/Graphics.hpp>
-#include <array>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <numeric>
 #include <random>
-
-// constant value
-///////////////////////////////////////////////////////////////////////////////////////////
-const double frame{60};
-const double delta{1 / frame};
-
-// random generation of number
-///////////////////////////////////////////////////////////////////////////////////////////
-std::random_device r;
-std::default_random_engine eng(r());
-std::uniform_real_distribution<> dis(250., 600.);
-std::uniform_real_distribution<> dis2(-1., 1.);
 
 // get parameters
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -55,7 +42,7 @@ two_d operator*(two_d const& a, double const& b) {
 }
 two_d operator/(two_d const& a, int b) { return two_d{a.x / b, a.y / b}; }
 
-//norm and distance function
+// norm and distance function
 double norm(two_d const& p) { return std::hypot(p.x, p.y); }
 
 double distance(two_d const& p, two_d const& otherp) {
@@ -71,18 +58,19 @@ class Boid {
   two_d velocity_;
 
  public:
-  Boid()  // random number by default
-      : position_{dis(eng), dis(eng)}, velocity_{dis2(eng), dis2(eng)} {}
+  // Constructor
+  Boid(double posX, double posY, double velX, double velY)
+      : position_{posX, posY}, velocity_{velX, velY} {}
 
   two_d get_p() const { return position_; }
   two_d get_v() const { return velocity_; }
 
-  bool near(Boid const& other, double radius) const {
+  bool near(Boid const& other, double d) const {
     if (position_.x == other.position_.x && position_.y == other.position_.y) {
       return false;
     }
     if (std::sqrt(pow(position_.x - other.position_.x, 2) +
-                  pow(position_.y - other.position_.y, 2)) <= radius) {
+                  pow(position_.y - other.position_.y, 2)) <= d) {
       return true;
     } else
       return false;
@@ -111,11 +99,11 @@ class Boid {
 
   // center of mass
   ////////////////////////////////////////////////////////////////////////////////////////////
-  two_d center_mass(std::vector<Boid> const& flock, double const& r) {
+  two_d center_mass(std::vector<Boid> const& flock, double const& d) {
     two_d x_c{0., 0.};
     int n{0};
     for (auto& other_b : flock) {
-      if (near(other_b, r)) {
+      if (near(other_b, d)) {
         ++n;
         x_c = x_c + other_b.get_p();
       }
@@ -126,54 +114,39 @@ class Boid {
     return x_c;
   }
 
-
   // 3 laws
   /////////////////////////////////////////////////////////////////////////////////////////////
-  /*two_d separation(std::vector<Boid> const& flock, double const& s,
-                   double const& r_separation) {
-    two_d v1{0., 0.};
-    for (auto& other_b : flock) {
-      if (near(other_b, r_separation)) {
-        v1 = (other_b.get_p() - get_p()) + v1;
-      }
-    }
-    return v1 * (-s);
-  }*/
-
 
   two_d separation(std::vector<Boid> const& flock, double const& s,
-                   double const& r_separation) {
+                   double const& d_separation) {
     two_d v1{0., 0.};
-    /* std::vector<Boid> v;
-     for(auto& other_b: flock){
-       if (near(other_b, r_separation)){
-         v.push_back(other_b);
-       }
-     }*/
-    two_d v2{0.,0.,};
-    v1 = std::accumulate(
-        std::begin(flock), std::end(flock), v2, [=](two_d sum, Boid b) {
-          if (near(b, r_separation)) {
-            return sum+(b.get_p() - get_p()) ;
-          } else {
-            return v1;
-          }
-        });
+    v1 = std::accumulate(std::begin(flock), std::end(flock), v1,
+                         [&](two_d sum, const Boid other_b) {
+                           if (near(other_b, d_separation)) {
+                             return sum + (other_b.get_p() - get_p());
+                           } else {
+                             return sum;
+                           }
+                         });
     return v1 * (-s);
   }
 
   two_d alignment(std::vector<Boid> const& flock, double const& a,
-                  double const& r) {
+                  double const& d) {
     two_d v2{0., 0.};
     int n{0};
-    for (auto& other_b : flock) {
-      if (near(other_b, r)) {
-        ++n;
-        v2 = other_b.get_v() + v2;
-      }
-    }
+
+    std::accumulate(std::begin(flock), std::end(flock), v2,
+                    [&](two_d sum, const Boid other_b) {
+                      if (near(other_b, d)) {
+                        ++n;
+                        return sum + other_b.get_v();
+                      } else {
+                        return sum;
+                      }
+                    });
     if (n > 1) {
-      v2 = v2 * n;
+      v2 = v2 / n;
       return (v2 - get_v()) * a;
     } else {
       return {0., 0.};
@@ -181,9 +154,9 @@ class Boid {
   }
 
   two_d cohesion(std::vector<Boid> const& flock, double const& c,
-                 double const& r) {
+                 double const& d) {
     two_d v3{0., 0.};
-    two_d x_c = center_mass(flock, r);
+    two_d x_c = center_mass(flock, d);
     if (x_c.x == 0 && x_c.y == 0) {
       return v3;
     }
@@ -192,8 +165,24 @@ class Boid {
   }
 };
 
+class Flock {
+ private:
+  double mean_position_;
+  double standard_d_postion_;
+  double mean_velocity_;
+  double standard_d_velocity_;
+};
+
 // Main
 int main() {
+  double frame{60};
+  double delta{1 / frame};
+
+  std::random_device r;
+  std::default_random_engine eng(r());
+  std::uniform_real_distribution<> dis(250., 600.);
+  std::uniform_real_distribution<> dis2(-1., 1.);
+
   double num_boids{0.};
   double d_s{0.};
   double d{0.};
@@ -202,13 +191,11 @@ int main() {
   double c{0.};
   set_parameters(num_boids, d, d_s, s, a, c);
 
-
-  // creation of the flock
+  // flock generarion
   std::vector<Boid> flock;
   for (int i = 0; i < num_boids; ++i) {
-    flock.push_back(Boid());
+    flock.push_back(Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
   }
-
   // graphics
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
   window.setFramerateLimit(frame);
@@ -232,8 +219,7 @@ int main() {
 
       // Setting the position of the circle
       circle.setPosition(boid.get_p().x, boid.get_p().y);
-
-      // Boids are blue for me
+      
       circle.setFillColor(sf::Color::Black);
       window.draw(circle);
     }
