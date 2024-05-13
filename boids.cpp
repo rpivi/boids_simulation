@@ -65,12 +65,12 @@ class Boid {
   two_d get_p() const { return position_; }
   two_d get_v() const { return velocity_; }
 
+//near function
   bool near(Boid const& other, double d) const {
-    if (position_.x == other.position_.x && position_.y == other.position_.y) {
+    if (this==&other) {
       return false;
     }
-    if (std::sqrt(pow(position_.x - other.position_.x, 2) +
-                  pow(position_.y - other.position_.y, 2)) <= d) {
+    if (distance(position_, other.position_) <= d) {
       return true;
     } else
       return false;
@@ -85,6 +85,7 @@ class Boid {
     position_ = position_ + velocity_ * delta_t;
   }
 
+//toroidal space
   void borders() {
     if (position_.x < 0) {
       position_.x += 900;
@@ -98,7 +99,6 @@ class Boid {
   }
 
   // center of mass
-  ////////////////////////////////////////////////////////////////////////////////////////////
   two_d center_mass(std::vector<Boid> const& flock, double const& d) {
     two_d x_c{0., 0.};
     int n{0};
@@ -115,8 +115,6 @@ class Boid {
   }
 
   // 3 laws
-  /////////////////////////////////////////////////////////////////////////////////////////////
-
   two_d separation(std::vector<Boid> const& flock, double const& s,
                    double const& d_separation) {
     two_d v1{0., 0.};
@@ -198,11 +196,12 @@ int main() {
   for (int i = 0; i < num_boids; ++i) {
     flock.push_back(Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
   }
-  // graphics
+  // graphic
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
-  window.setFramerateLimit(frame);
-  // setting the framerate
 
+   // setting the framerate
+   window.setFramerateLimit(frame);
+ 
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
