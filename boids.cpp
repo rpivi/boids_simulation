@@ -92,21 +92,6 @@ class Boid {
     }
   }
 
-  // center of mass
-  /* vec center_mass(std::vector<Boid> const& flock, double const& d) {
-     vec x_c{0., 0.};
-     int n{0};
-     for (auto& other_b : flock) {
-       if (near(other_b, d)) {
-         ++n;
-         x_c = x_c + other_b.get_p();
-       }
-     }
-     if (n > 1) {
-       return x_c / n;
-     }
-     return x_c;
-   }*/
   vec center_mass(std::vector<Boid> const& flock, double const& d) {
     vec x_c{0., 0.};
     int n{0};
