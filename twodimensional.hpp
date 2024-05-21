@@ -17,5 +17,5 @@ double norm(vec const& p);
 
 double distance(vec const& p, vec const& otherp);
 
-}  // namespace two_dim
+}  // namespace two_dim
 #endif

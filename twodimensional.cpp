@@ -23,4 +23,4 @@ double distance(vec const& p, vec const& otherp) {
   vec difference = p - otherp;
   return norm(difference);
 }
-}  // namespace two_dim
+}  // namespace two_dim
