@@ -166,6 +166,7 @@ class Boid {
   }
 };
 
+
 class Flock {
  private:
   double mean_position_;
