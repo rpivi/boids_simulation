@@ -6,6 +6,7 @@
 #include <numeric>
 #include <random>
 
+
 // get parameters
 ///////////////////////////////////////////////////////////////////////////////////////////
 
@@ -23,32 +24,6 @@ void set_parameters(double& num_boids, double& d, double& d_s, double& s,
   std::cin >> a;
   std::cout << "\n the cohesion parameter: ";
   std::cin >> c;
-}
-
-// two dimensional rappresentation
-////////////////////////////////////////////////////////////////////////////////////////////
-struct vec {
-  double x;
-  double y;
-};
-// overloading operator
-vec operator+(vec const& a, vec const& b) {
-  return vec{a.x + b.x, a.y + b.y};
-}
-vec operator-(vec const& a, vec const& b) {
-  return vec{a.x - b.x, a.y - b.y};
-}
-vec operator*(vec const& a, double const& b) {
-  return vec{a.x * b, a.y * b};
-}
-vec operator/(vec const& a, int b) { return vec{a.x / b, a.y / b}; }
-
-// norm and distance function
-double norm(vec const& p) { return std::hypot(p.x, p.y); }
-
-double distance(vec const& p, vec const& otherp) {
-  vec difference = p - otherp;
-  return norm(difference);
 }
 
 // Boid
@@ -106,6 +81,7 @@ class Boid {
     x_c = std::accumulate(std::begin(flock), std::end(flock), vec{0., 0.},
                           [&](vec sum, const Boid other_b) {
                             if (near(other_b, d)) {
+                              ++n;
                               return sum + other_b.get_p();
                             } else {
                               return sum;
