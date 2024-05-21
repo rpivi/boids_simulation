@@ -91,7 +91,6 @@ class Boid {
       position_.y -= 900;
     }
   }
-
   vec center_mass(std::vector<Boid> const& flock, double const& d) {
     vec x_c{0., 0.};
     int n{0};
