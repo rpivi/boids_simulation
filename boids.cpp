@@ -26,27 +26,21 @@ void set_parameters(double& num_boids, double& d, double& d_s, double& s,
 
 // two dimensional rappresentation
 ////////////////////////////////////////////////////////////////////////////////////////////
-struct two_d {
+struct vec {
   double x;
   double y;
 };
 // overloading operator
-two_d operator+(two_d const& a, two_d const& b) {
-  return two_d{a.x + b.x, a.y + b.y};
-}
-two_d operator-(two_d const& a, two_d const& b) {
-  return two_d{a.x - b.x, a.y - b.y};
-}
-two_d operator*(two_d const& a, double const& b) {
-  return two_d{a.x * b, a.y * b};
-}
-two_d operator/(two_d const& a, int b) { return two_d{a.x / b, a.y / b}; }
+vec operator+(vec const& a, vec const& b) { return vec{a.x + b.x, a.y + b.y}; }
+vec operator-(vec const& a, vec const& b) { return vec{a.x - b.x, a.y - b.y}; }
+vec operator*(vec const& a, double const& b) { return vec{a.x * b, a.y * b}; }
+vec operator/(vec const& a, int b) { return vec{a.x / b, a.y / b}; }
 
 // norm and distance function
-double norm(two_d const& p) { return std::hypot(p.x, p.y); }
+double norm(vec const& p) { return std::hypot(p.x, p.y); }
 
-double distance(two_d const& p, two_d const& otherp) {
-  two_d difference = p - otherp;
+double distance(vec const& p, vec const& otherp) {
+  vec difference = p - otherp;
   return norm(difference);
 }
 
@@ -54,20 +48,20 @@ double distance(two_d const& p, two_d const& otherp) {
 /////////////////////////////////////////////////////////////////////////////////////////////
 class Boid {
  private:
-  two_d position_;
-  two_d velocity_;
+  vec position_;
+  vec velocity_;
 
  public:
   // Constructor
   Boid(double posX, double posY, double velX, double velY)
       : position_{posX, posY}, velocity_{velX, velY} {}
 
-  two_d get_p() const { return position_; }
-  two_d get_v() const { return velocity_; }
+  vec get_p() const { return position_; }
+  vec get_v() const { return velocity_; }
 
-//near function
+  // near function
   bool near(Boid const& other, double d) const {
-    if (this==&other) {
+    if (this == &other) {
       return false;
     }
     if (distance(position_, other.position_) <= d) {
@@ -76,7 +70,7 @@ class Boid {
       return false;
   }
 
-  void update_v(two_d const& v1, two_d const& v2, two_d const& v3) {
+  void update_v(vec const& v1, vec const& v2, vec const& v3) {
     velocity_ = velocity_ + v1 + v2 + v3;
   }
 
@@ -85,7 +79,7 @@ class Boid {
     position_ = position_ + velocity_ * delta_t;
   }
 
-//toroidal space
+  // toroidal space
   void borders() {
     if (position_.x < 0) {
       position_.x += 900;
@@ -98,17 +92,32 @@ class Boid {
     }
   }
 
-
   // center of mass
-  two_d center_mass(std::vector<Boid> const& flock, double const& d) {
-    two_d x_c{0., 0.};
+  /* vec center_mass(std::vector<Boid> const& flock, double const& d) {
+     vec x_c{0., 0.};
+     int n{0};
+     for (auto& other_b : flock) {
+       if (near(other_b, d)) {
+         ++n;
+         x_c = x_c + other_b.get_p();
+       }
+     }
+     if (n > 1) {
+       return x_c / n;
+     }
+     return x_c;
+   }*/
+  vec center_mass(std::vector<Boid> const& flock, double const& d) {
+    vec x_c{0., 0.};
     int n{0};
-    for (auto& other_b : flock) {
-      if (near(other_b, d)) {
-        ++n;
-        x_c = x_c + other_b.get_p();
-      }
-    }
+    x_c = std::accumulate(std::begin(flock), std::end(flock), vec{0., 0.},
+                          [&](vec sum, const Boid other_b) {
+                            if (near(other_b, d)) {
+                              return sum + other_b.get_p();
+                            } else {
+                              return sum;
+                            }
+                          });
     if (n > 1) {
       return x_c / n;
     }
@@ -116,12 +125,12 @@ class Boid {
   }
 
   // 3 laws
-  two_d separation(std::vector<Boid> const& flock, double const& s,
-                   double const& d_separation) {
-    two_d v1{0., 0.};
-    two_d v_null{0., 0.};
-    v1 = std::accumulate(std::begin(flock), std::end(flock), v_null,
-                         [&](two_d sum, const Boid other_b) {
+  vec separation(std::vector<Boid> const& flock, double const& s,
+                 double const& d_separation) {
+    vec v1{0., 0.};
+
+    v1 = std::accumulate(std::begin(flock), std::end(flock), vec{0., 0.},
+                         [&](vec sum, const Boid other_b) {
                            if (near(other_b, d_separation)) {
                              return sum + (other_b.get_p() - get_p());
                            } else {
@@ -131,21 +140,21 @@ class Boid {
     return v1 * (-s);
   }
 
-  two_d alignment(std::vector<Boid> const& flock, double const& a,
-                  double const& d) {
-    two_d v2{0., 0.};
-    two_d v_null{0., 0.};
+  vec alignment(std::vector<Boid> const& flock, double const& a,
+                double const& d) {
+    vec v2{0., 0.};
+
     int n{0};
 
-    v2=std::accumulate(std::begin(flock), std::end(flock), v_null,
-                    [&](two_d sum, const Boid other_b) {
-                      if (near(other_b, d)) {
-                        ++n;
-                        return sum + other_b.get_v();
-                      } else {
-                        return sum;
-                      }
-                    });
+    v2 = std::accumulate(std::begin(flock), std::end(flock), vec{0., 0.},
+                         [&](vec sum, const Boid other_b) {
+                           if (near(other_b, d)) {
+                             ++n;
+                             return sum + other_b.get_v();
+                           } else {
+                             return sum;
+                           }
+                         });
     if (n > 1) {
       v2 = v2 / n;
       return (v2 - get_v()) * a;
@@ -154,10 +163,10 @@ class Boid {
     }
   }
 
-  two_d cohesion(std::vector<Boid> const& flock, double const& c,
-                 double const& d) {
-    two_d v3{0., 0.};
-    two_d x_c = center_mass(flock, d);
+  vec cohesion(std::vector<Boid> const& flock, double const& c,
+               double const& d) {
+    vec v3{0., 0.};
+    vec x_c = center_mass(flock, d);
     if (x_c.x == 0 && x_c.y == 0) {
       return v3;
     }
@@ -200,9 +209,9 @@ int main() {
   // graphic
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
 
-   // setting the framerate
-   window.setFramerateLimit(frame);
- 
+  // setting the framerate
+  window.setFramerateLimit(frame);
+
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -221,7 +230,7 @@ int main() {
 
       // Setting the position of the circle
       circle.setPosition(boid.get_p().x, boid.get_p().y);
-      
+
       circle.setFillColor(sf::Color::Black);
       window.draw(circle);
     }
