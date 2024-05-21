@@ -98,6 +98,7 @@ class Boid {
     }
   }
 
+
   // center of mass
   two_d center_mass(std::vector<Boid> const& flock, double const& d) {
     two_d x_c{0., 0.};
