@@ -2,6 +2,7 @@
 #include <cassert>
 #include <cmath>
 #include <iostream>
+#include <iterator>
 #include <numeric>
 #include <random>
 
@@ -65,9 +66,9 @@ class Boid {
   two_d get_p() const { return position_; }
   two_d get_v() const { return velocity_; }
 
-//near function
+  // near function
   bool near(Boid const& other, double d) const {
-    if (this==&other) {
+    if (this == &other) {
       return false;
     }
     if (distance(position_, other.position_) <= d) {
@@ -85,7 +86,7 @@ class Boid {
     position_ = position_ + velocity_ * delta_t;
   }
 
-//toroidal space
+  // toroidal space
   void borders() {
     if (position_.x < 0) {
       position_.x += 900;
@@ -98,17 +99,18 @@ class Boid {
     }
   }
 
-
   // center of mass
   two_d center_mass(std::vector<Boid> const& flock, double const& d) {
     two_d x_c{0., 0.};
     int n{0};
-    for (auto& other_b : flock) {
-      if (near(other_b, d)) {
-        ++n;
-        x_c = x_c + other_b.get_p();
-      }
-    }
+    x_c = std::accumulate(std::begin(flock), std::end(flock), two_d{0., 0.},
+                          [&](two_d sum, const Boid other_b) {
+                            if (near(other_b, d)) {
+                              return sum + other_b.get_p();
+                            } else {
+                              return sum;
+                            }
+                          });
     if (n > 1) {
       return x_c / n;
     }
@@ -119,8 +121,7 @@ class Boid {
   two_d separation(std::vector<Boid> const& flock, double const& s,
                    double const& d_separation) {
     two_d v1{0., 0.};
-    two_d v_null{0., 0.};
-    v1 = std::accumulate(std::begin(flock), std::end(flock), v_null,
+    v1 = std::accumulate(std::begin(flock), std::end(flock), two_d{0., 0.},
                          [&](two_d sum, const Boid other_b) {
                            if (near(other_b, d_separation)) {
                              return sum + (other_b.get_p() - get_p());
@@ -134,18 +135,16 @@ class Boid {
   two_d alignment(std::vector<Boid> const& flock, double const& a,
                   double const& d) {
     two_d v2{0., 0.};
-    two_d v_null{0., 0.};
     int n{0};
-
-    v2=std::accumulate(std::begin(flock), std::end(flock), v_null,
-                    [&](two_d sum, const Boid other_b) {
-                      if (near(other_b, d)) {
-                        ++n;
-                        return sum + other_b.get_v();
-                      } else {
-                        return sum;
-                      }
-                    });
+    v2 = std::accumulate(std::begin(flock), std::end(flock), two_d{0., 0.},
+                         [&](two_d sum, const Boid other_b) {
+                           if (near(other_b, d)) {
+                             ++n;
+                             return sum + other_b.get_v();
+                           } else {
+                             return sum;
+                           }
+                         });
     if (n > 1) {
       v2 = v2 / n;
       return (v2 - get_v()) * a;
@@ -200,9 +199,9 @@ int main() {
   // graphic
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
 
-   // setting the framerate
-   window.setFramerateLimit(frame);
- 
+  // setting the framerate
+  window.setFramerateLimit(frame);
+
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -221,7 +220,7 @@ int main() {
 
       // Setting the position of the circle
       circle.setPosition(boid.get_p().x, boid.get_p().y);
-      
+
       circle.setFillColor(sf::Color::Black);
       window.draw(circle);
     }
