@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.16)
-project(statistics VERSION 0.1.0)
+project(progettopf VERSION 0.1.0)
 
 # abilita il supporto per i test, tra cui l'opzione BUILD_TESTING usata sotto
 include(CTest)
@@ -12,26 +12,28 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # abilita warning
-string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra")
+string(APPEND CMAKE_CXX_FLAGS
+      " -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion"
+      " -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast")
 
-# abilita:
-# - l'address sanitizer e l'undefined-behaviour sanitizer
-# - _LIBCPP_DEBUG (utilizzato da clang)
-# - _GLIBCXX_ASSERTIONS (utilizzato da gcc)
-#in debug mode
-string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer -D_LIBCPP_DEBUG -D_GLIBCXX_ASSERTIONS")
-string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer -D_LIBCPP_DEBUG -D_GLIBCXX_ASSERTIONS")
+# abilita asserzioni di debug (in gcc), l'address sanitizer e l'undefined-behaviour sanitizer in debug mode
+string(APPEND CMAKE_CXX_FLAGS_DEBUG " -D_GLIBCXX_ASSERTIONS -fsanitize=address,undefined -fno-omit-frame-pointer")
+string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer")
 
-#add_executable(sample main.cpp sample.cpp)
+# richiedi il componente graphics della libreria SFML, versione 2.5
+#   le dipendenze vengono identificate automaticamente
+find_package(SFML 2.5 COMPONENTS graphics REQUIRED)
+
+add_executable(mandelbrot main_sfml.cpp image.cpp mandelbrot.cpp)
+target_link_libraries(mandelbrot PRIVATE sfml-graphics)
 
 # se il testing e' abilitato...
 #   per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
 if (BUILD_TESTING)
 
-  # aggiungi l'eseguibile sample.t
-  add_executable(sample.t sample.test.cpp sample.cpp)
-  # aggiungi l'eseguibile sample.t alla lista dei test
-  add_test(NAME sample.t COMMAND sample.t)
+  # aggiungi l'eseguibile all.t
+  # add_executable(all.t all.t.cpp complex.t.cpp)
+  # aggiungi l'eseguibile all.t alla lista dei test
+  # add_test(NAME all.t COMMAND all.t)
 
 endif()
-
