@@ -17,7 +17,7 @@ TEST_CASE("Testing the distance function ") {
   SUBCASE("Positive and negative vec") {
     two_dim::vec p1{4.5, 3.4};
     two_dim::vec p2{-1., -1.};
-    CHECK(two_dim::distance(p1, p2) == Approx(7.0434));
+    CHECK(two_dim::distance(p1, p2) == doctest::Approx(7.0434));
   }
 }
 
