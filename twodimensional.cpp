@@ -1,6 +1,6 @@
 #include "twodimensional.hpp"
-
 #include <cmath>
+
 namespace two_dim {
 // overloading operator
 vec operator+(vec const& a, vec const& b) {
