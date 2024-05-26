@@ -25,7 +25,7 @@ int main() {
   // flock generarion
   std::vector<birds::Boid> flock;
   for (int i = 0; i < num_boids; ++i) {
-    flock.push_back(birds::Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
+    flock.push_back( birds::Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
   }
   // graphic
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
