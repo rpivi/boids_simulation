@@ -31,7 +31,7 @@ int main() {
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
 
   // setting the framerate
-  window.setFramerateLimit(frame);
+  window.setFramerateLimit(static_cast<unsigned int>(frame));
 
   while (window.isOpen()) {
     sf::Event event;
@@ -50,7 +50,7 @@ int main() {
       boid.borders();
 
       // Setting the position of the circle
-      circle.setPosition(boid.get_p().x, boid.get_p().y);
+      circle.setPosition(static_cast<float>(boid.get_p().x), static_cast<float>(boid.get_p().y));
 
       circle.setFillColor(sf::Color::Black);
       window.draw(circle);

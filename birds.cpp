@@ -1,8 +1,11 @@
 #include "birds.hpp"
 
 #include <cassert>
+#include <cmath>
 #include <iostream>
+#include <iterator>
 #include <numeric>
+#include <vector>
 
 namespace birds {
 // get parameters
@@ -128,4 +131,32 @@ two_dim::vec Boid::cohesion(std::vector<Boid> const& flock, double const& c,
   v3 = (x_c - get_p()) * c;
   return v3;
 }
-};  // namespace birds
+
+double Flock::mean_position(std::vector<Boid> const& flock) {
+  double mean_position{};
+  mean_position =
+      std::accumulate(std::begin(flock), std::end(flock), double{0.},
+                      [&](double sum, const Boid b) {
+                        sum += sqrt(pow(b.get_p().x, 2) + pow(b.get_p().y, 2));
+                        return sum;
+                      }) /
+      static_cast<double>(std::size(flock));
+
+  return mean_position;
+}
+
+double Flock::std_dev_p(std::vector<Boid> const& flock) {
+  double std_dev_p{};
+  double sum_p2{};
+  sum_p2 = std::accumulate(std::begin(flock), std::end(flock), double{0.},
+                           [&](double sum, Boid const& b) {
+                             sum += (pow(b.get_p().x, 2) + pow(b.get_p().y, 2));
+                             return sum;
+                           });
+  std_dev_p = sqrt((sum_p2 - static_cast<double>(std::size(flock)) *
+                                 pow(Flock::mean_position(flock), 2)) /
+                   (static_cast<double>(std::size(flock)) - 1));
+  return std_dev_p;
+}
+
+}  // namespace birds
