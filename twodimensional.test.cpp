@@ -38,7 +38,7 @@ TEST_CASE("Testing the addition") {
     two_dim::vec p1{900., 900.};
     two_dim::vec p2{-2.4, 67.};
     two_dim::vec p = p1 + p2;
-    CHECK(p.x == 897.4);
+    CHECK(p.x == 897.6);
     CHECK(p.y == 967.);
   }
 }
@@ -51,5 +51,33 @@ TEST_CASE("Testing the norm function ") {
   SUBCASE("Test norm 1") {
     two_dim::vec p{230., 33.4};
     CHECK(two_dim::norm(p) == doctest::Approx(232.412));
+  }
+}
+
+TEST_CASE("Testing the distance function ") {
+  SUBCASE("The distance from origin") {
+    two_dim::vec p{0., 0.};
+    two_dim::vec p2{3., 4.};
+    CHECK(distance(p, p2) == 5.);
+  }
+  SUBCASE("sign test") {
+    two_dim::vec p{0., 0.};
+    two_dim::vec p2{3., 4.};
+    CHECK(distance(p2, p) == 5.);
+  }
+  SUBCASE("0 distace test") {
+    two_dim::vec p{1., 1.};
+    two_dim::vec p2{1., 1.};
+    CHECK(distance(p2, p) == 0.);
+  }
+  SUBCASE("test 1") {
+    two_dim::vec p{3., 0.};
+    two_dim::vec p2{0., 1.};
+    CHECK(distance(p, p2) == doctest::Approx(3.16227));
+  }
+  SUBCASE("test 2") {
+    two_dim::vec p{3., 0.};
+    two_dim::vec p2{1., 1.};
+    CHECK(distance(p, p2) == doctest::Approx(2.23606));
   }
 }
