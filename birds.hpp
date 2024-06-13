@@ -53,13 +53,13 @@ class Boid {
 class Flock {
  private:
   two_dim::vec mean_position_{};
-  two_dim::vec standard_dev_postion_{};
+  two_dim::vec standard_dev_position_{};
   two_dim::vec mean_velocity_{};
   two_dim::vec standard_dev_velocity_{};
 
  public:
   two_dim::vec const get_mean_p() { return mean_position_; }
-  two_dim::vec const get_std_dev_p() { return standard_dev_postion_; }
+  two_dim::vec const get_std_dev_p() { return standard_dev_position_; }
   two_dim::vec const get_mean_v() { return mean_velocity_; }
   two_dim::vec const get_std_dev_v() { return standard_dev_velocity_; }
 
