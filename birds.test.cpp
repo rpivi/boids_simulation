@@ -83,14 +83,36 @@ TEST_CASE("Testing the near function ") {
 //get p
 //get v
 
-TEST_CASE("Testing the update_v function ") {
+TEST_CASE("Testing the update_v and update_p functions") {
 
   SUBCASE("simple test") {
     two_dim::vec v1 {0. ,0.};
     two_dim::vec v2 {0. ,0.};
     two_dim::vec v3 {0. ,0.};
     birds::Boid p1{1., 1., 1., 1.};
+    double delta=1;
     p1.update_v(v1 , v2, v3);
+    p1.update_p(delta);
     CHECK (p1.get_v().x==1 && p1.get_v().y==1);
+    CHECK(p1.get_p().x==1 && p1.get_p().y==1);
+  }
+  SUBCASE("test 1") {
+    two_dim::vec v1 {1. ,6.};
+    two_dim::vec v2 {5. ,8.};
+    two_dim::vec v3 {40. ,6.};
+    birds::Boid p1{1., 1., 700., 200.};
+    double delta=1/60;
+    p1.update_v(v1 , v2, v3);
+    p1.update_p(delta);
+    CHECK (p1.get_v().x==746 && p1.get_v().y==220);
+    CHECK (p1.get_p().x==1+746/60 && p1.get_p().y==1+220/60);
+  }
+  SUBCASE("test 1") {
+    two_dim::vec v1 {1. ,-6.};
+    two_dim::vec v2 {-5. ,8.};
+    two_dim::vec v3 {40. ,-6.};
+    birds::Boid p1{1., 1., -700., 200.};
+    p1.update_v(v1 , v2, v3);
+    CHECK (p1.get_v().x==-664 && p1.get_v().y==196);
   }
 }
