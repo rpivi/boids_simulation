@@ -135,8 +135,7 @@ two_dim::vec Boid::cohesion(std::vector<Boid> const& flock, double const& c,
 }
 
 two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
-  two_dim::vec mean_position{};
-  mean_position.x =
+  mean_position_.x =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
                       [&](double sum, const Boid b) {
                         sum += b.get_p().x;
@@ -144,7 +143,7 @@ two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
                       }) /
       static_cast<double>(std::size(flock));
 
-  mean_position.y =
+  mean_position_.y =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
                       [&](double sum, const Boid b) {
                         sum += b.get_p().y;
@@ -152,11 +151,10 @@ two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
                       }) /
       static_cast<double>(std::size(flock));
 
-  return mean_position;
+  return mean_position_;
 }
 
 two_dim::vec Flock::std_dev_p(std::vector<Boid> const& flock) {
-  two_dim::vec std_dev_p{};
   two_dim::vec sum_p2{};
   sum_p2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
                              [&](double sum, Boid const& b) {
@@ -170,21 +168,20 @@ two_dim::vec Flock::std_dev_p(std::vector<Boid> const& flock) {
                                return sum;
                              });
 
-  std_dev_p.x = sqrt((sum_p2.x - static_cast<double>(std::size(flock)) *
+  standard_dev_position_.x = sqrt((sum_p2.x - static_cast<double>(std::size(flock)) *
                                      pow(Flock::mean_position(flock).x, 2)) /
                      ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
 
-  std_dev_p.y = sqrt((sum_p2.y - static_cast<double>(std::size(flock)) *
+  standard_dev_position_.y = sqrt((sum_p2.y - static_cast<double>(std::size(flock)) *
                                      pow(Flock::mean_position(flock).y, 2)) /
                      ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
 
-  return std_dev_p;
+  return standard_dev_position_;
 }
 
 
 two_dim::vec Flock::mean_velocity(std::vector<Boid> const& flock) {
-  two_dim::vec mean_velocity{};
-  mean_velocity.x =
+  mean_velocity_.x =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
                       [&](double sum, const Boid b) {
                         sum += b.get_v().x;
@@ -192,7 +189,7 @@ two_dim::vec Flock::mean_velocity(std::vector<Boid> const& flock) {
                       }) /
       static_cast<double>(std::size(flock));
 
-  mean_velocity.y =
+  mean_velocity_.y =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
                       [&](double sum, const Boid b) {
                         sum += b.get_v().y;
@@ -200,11 +197,10 @@ two_dim::vec Flock::mean_velocity(std::vector<Boid> const& flock) {
                       }) /
       static_cast<double>(std::size(flock));
 
-  return mean_velocity;
+  return mean_velocity_;
 }
 
 two_dim::vec Flock::std_dev_v(std::vector<Boid> const& flock) {
-  two_dim::vec std_dev_v{};
   two_dim::vec sum_v2{};
   sum_v2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
                              [&](double sum, Boid const& b) {
@@ -218,15 +214,15 @@ two_dim::vec Flock::std_dev_v(std::vector<Boid> const& flock) {
                                return sum;
                              });
 
-  std_dev_v.x = sqrt((sum_v2.x - static_cast<double>(std::size(flock)) *
+  standard_dev_velocity_.x = sqrt((sum_v2.x - static_cast<double>(std::size(flock)) *
                                      pow(Flock::mean_velocity(flock).x, 2)) /
                      ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
 
-  std_dev_v.y = sqrt((sum_v2.y - static_cast<double>(std::size(flock)) *
+  standard_dev_velocity_.y = sqrt((sum_v2.y - static_cast<double>(std::size(flock)) *
                                      pow(Flock::mean_velocity(flock).y, 2)) /
                      ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
 
-  return std_dev_v;
+  return standard_dev_velocity_;
 }
 
 }  // namespace birds
