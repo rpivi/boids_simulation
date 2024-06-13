@@ -52,19 +52,21 @@ class Boid {
 
 class Flock {
  private:
-  double mean_position_;
-  double standard_dev_postion_;
-  double mean_velocity_;
-  double standard_dev_velocity_;
+  two_dim::vec mean_position_{};
+  two_dim::vec standard_dev_postion_{};
+  two_dim::vec mean_velocity_{};
+  two_dim::vec standard_dev_velocity_{};
 
  public:
-  // double const get_mean_p() {return mean_position_;}
-  // double const get_std_dev_p() {return standard_d_postion_;}
-  //  double const get_mean_v() {return mean_velocity_;}
-  //  double const get_std_dev_v() {return standard_d_velocity_;}
+  two_dim::vec const get_mean_p() { return mean_position_; }
+  two_dim::vec const get_std_dev_p() { return standard_dev_postion_; }
+  two_dim::vec const get_mean_v() { return mean_velocity_; }
+  two_dim::vec const get_std_dev_v() { return standard_dev_velocity_; }
 
-  double mean_position(std::vector<Boid> const& flock);
-  double std_dev_p(std::vector<Boid> const& flock);
+  two_dim::vec mean_position(std::vector<Boid> const& flock);
+  two_dim::vec std_dev_p(std::vector<Boid> const& flock);
+  two_dim::vec mean_velocity(std::vector<Boid> const& flock);
+  two_dim::vec std_dev_v(std::vector<Boid> const& flock);
 };
 
 }  // namespace birds
