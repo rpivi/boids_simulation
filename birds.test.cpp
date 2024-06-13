@@ -5,11 +5,92 @@
 #include "doctest.h"
 
 TEST_CASE("Testing the near function ") {
-  SUBCASE("The diagonal of a square") {
+  //true
+  SUBCASE("simple test") {
     double d = 50;
     birds::Boid p1{1., 0.,1.,1.};
     birds::Boid p2{1., 1., 1., 1.};
     CHECK (p2.near(p1 , d)==true);
   }
+  SUBCASE("test 1 ") {
+    double d = 1.414213563;
+    birds::Boid p1{0., 0.,0.,0.};
+    birds::Boid p2{1., 1., 0., 0.};
+    CHECK (p2.near(p1 , d)==true);
+  }
+  SUBCASE("test 2 ") {
+    double d = 1.414213563;
+    birds::Boid p1{0., 0.,0.,0.};
+    birds::Boid p2{1., 1., 0., 0.};
+    CHECK (p1.near(p2 , d)==true);
+  }
+  SUBCASE("test 3") {
+    double d = 6.708204;
+    birds::Boid p1{11., 1.,0.,0.};
+    birds::Boid p2{3., 7., 0., 0.};
+    CHECK (p2.near(p1 , d)==true);
+  }
+  SUBCASE("test 4") {
+    double d = 856.30894;
+    birds::Boid p1{711., 610.,0.,0.};
+    birds::Boid p2{40., 78., 0., 0.};
+    CHECK (p2.near(p1 , d)==true);
+  }
+  SUBCASE("test of two equal birds") {
+    double d = 1;
+    birds::Boid p1{40., 78., 0., 0.};
+    birds::Boid p2{40., 78., 0., 0.};
+    CHECK (p2.near(p1 , d)==true);
+  }
+  //false
+  SUBCASE("test of bird himself") {
+    double d = 1;
+    birds::Boid p1{711., 610.,0.,0.};
+    CHECK (p1.near(p1 , d)==false);
+  }
+   SUBCASE("simple test") {
+    double d = 0.0001;
+    birds::Boid p1{1., 0.,1.,1.};
+    birds::Boid p2{1., 1., 1., 1.};
+    CHECK (p2.near(p1 , d)==false);
+  }
+  SUBCASE("test 1 ") {
+    double d = 1.414213560;
+    birds::Boid p1{0., 0.,0.,0.};
+    birds::Boid p2{1., 1., 0., 0.};
+    CHECK (p2.near(p1 , d)==false);
+  }
+  SUBCASE("test 2 ") {
+    double d = 1.414213560;
+    birds::Boid p1{0., 0.,0.,0.};
+    birds::Boid p2{1., 1., 0., 0.};
+    CHECK (p1.near(p2 , d)==false);
+  }
+  SUBCASE("test 3") {
+    double d = 6.70820;
+    birds::Boid p1{11., 1.,0.,0.};
+    birds::Boid p2{3., 7., 0., 0.};
+    CHECK (p2.near(p1 , d)==false);
+  }
+  SUBCASE("test 4") {
+    double d = 856.30891;
+    birds::Boid p1{711., 610.,0.,0.};
+    birds::Boid p2{40., 78., 0., 0.};
+    CHECK (p2.near(p1 , d)==false);
+  } 
 }
 
+//get p
+//get v
+
+TEST_CASE("Testing the update_v function ") {
+
+  SUBCASE("simple test") {
+    two_dim::vec v1 {0. ,0.};
+    two_dim::vec v2 {0. ,0.};
+    two_dim::vec v3 {0. ,0.};
+    birds::Boid p1{1., 1., 1., 1.};
+    p1.update_v(v1 , v2, v3);
+    CHECK (p1.get_v().x==1 && p1.get_v().y==1);
+  }
+}
