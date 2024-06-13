@@ -13,5 +13,3 @@ TEST_CASE("Testing the near function ") {
   }
 }
 
-
-
