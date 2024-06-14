@@ -134,14 +134,16 @@ two_dim::vec Boid::cohesion(std::vector<Boid> const& flock, double const& c,
   return v3;
 }
 
-two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
+void Flock::mean_position(std::vector<Boid> const& flock) {
+  auto N = static_cast<double>(std::size(flock));
+
   mean_position_.x =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
                       [&](double sum, const Boid b) {
                         sum += b.get_p().x;
                         return sum;
                       }) /
-      static_cast<double>(std::size(flock));
+      N;
 
   mean_position_.y =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
@@ -149,45 +151,40 @@ two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
                         sum += b.get_p().y;
                         return sum;
                       }) /
-      static_cast<double>(std::size(flock));
-
-  return mean_position_;
+      N;
 }
 
-two_dim::vec Flock::std_dev_p(std::vector<Boid> const& flock) {
+void Flock::std_dev_p(std::vector<Boid> const& flock) {
   two_dim::vec sum_p2{};
   sum_p2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b) {
-                               sum += b.get_p().x;
+                             [&](double sum, Boid const& b, Flock const& f) {
+                               sum += pow(b.get_p().x - f.mean_position_.x, 2);
                                return sum;
                              });
 
   sum_p2.y = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b) {
-                               sum += b.get_p().y;
+                             [&](double sum, Boid const& b, Flock const& f) {
+                               sum += pow(b.get_p().y - f.mean_position_.y, 2);
                                return sum;
                              });
 
-  standard_dev_position_.x = sqrt((sum_p2.x - static_cast<double>(std::size(flock)) *
-                                     pow(Flock::mean_position(flock).x, 2)) /
-                     ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
+  auto N = static_cast<double>(std::size(flock));
 
-  standard_dev_position_.y = sqrt((sum_p2.y - static_cast<double>(std::size(flock)) *
-                                     pow(Flock::mean_position(flock).y, 2)) /
-                     ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
+  standard_dev_position_.x = sqrt(sum_p2.x / ((N - 1) * N));
 
-  return standard_dev_position_;
+  standard_dev_position_.y = sqrt(sum_p2.y / ((N - 1) * N));
 }
 
+void Flock::mean_velocity(std::vector<Boid> const& flock) {
+  auto N = static_cast<double>(std::size(flock));
 
-two_dim::vec Flock::mean_velocity(std::vector<Boid> const& flock) {
   mean_velocity_.x =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
                       [&](double sum, const Boid b) {
                         sum += b.get_v().x;
                         return sum;
                       }) /
-      static_cast<double>(std::size(flock));
+      N;
 
   mean_velocity_.y =
       std::accumulate(std::begin(flock), std::end(flock), double{0.},
@@ -195,34 +192,27 @@ two_dim::vec Flock::mean_velocity(std::vector<Boid> const& flock) {
                         sum += b.get_v().y;
                         return sum;
                       }) /
-      static_cast<double>(std::size(flock));
-
-  return mean_velocity_;
+      N;
 }
 
-two_dim::vec Flock::std_dev_v(std::vector<Boid> const& flock) {
+void Flock::std_dev_v(std::vector<Boid> const& flock) {
+  auto N = static_cast<double>(std::size(flock));
   two_dim::vec sum_v2{};
   sum_v2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b) {
-                               sum += b.get_v().x;
+                             [&](double sum, Boid const& b, Flock const& f) {
+                               sum += pow(b.get_v().x - f.mean_velocity_.x, 2);
                                return sum;
                              });
 
   sum_v2.y = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b) {
-                               sum += b.get_v().y;
+                             [&](double sum, Boid const& b, Flock const& f) {
+                               sum += pow(b.get_v().y - f.mean_velocity_.y, 2);
                                return sum;
                              });
 
-  standard_dev_velocity_.x = sqrt((sum_v2.x - static_cast<double>(std::size(flock)) *
-                                     pow(Flock::mean_velocity(flock).x, 2)) /
-                     ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
+  standard_dev_velocity_.x = sqrt(sum_v2.x / (N * (N - 1)));
 
-  standard_dev_velocity_.y = sqrt((sum_v2.y - static_cast<double>(std::size(flock)) *
-                                     pow(Flock::mean_velocity(flock).y, 2)) /
-                     ((static_cast<double>(std::size(flock)) - 1)*static_cast<double>(std::size(flock))));
-
-  return standard_dev_velocity_;
+  standard_dev_velocity_.y = sqrt(sum_v2.y / (N * (N - 1)));
 }
 
 }  // namespace birds
