@@ -157,14 +157,14 @@ void Flock::mean_position(std::vector<Boid> const& flock) {
 void Flock::std_dev_p(std::vector<Boid> const& flock) {
   two_dim::vec sum_p2{};
   sum_p2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b, Flock const& f) {
-                               sum += pow(b.get_p().x - f.mean_position_.x, 2);
+                             [&](double sum, Boid const& b) {
+                               sum += pow(b.get_p().x - mean_position_.x, 2);
                                return sum;
                              });
 
   sum_p2.y = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b, Flock const& f) {
-                               sum += pow(b.get_p().y - f.mean_position_.y, 2);
+                             [&](double sum, Boid const& b) {
+                               sum += pow(b.get_p().y - mean_position_.y, 2);
                                return sum;
                              });
 
@@ -199,14 +199,14 @@ void Flock::std_dev_v(std::vector<Boid> const& flock) {
   auto N = static_cast<double>(std::size(flock));
   two_dim::vec sum_v2{};
   sum_v2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b, Flock const& f) {
-                               sum += pow(b.get_v().x - f.mean_velocity_.x, 2);
+                             [&](double sum, Boid const& b) {
+                               sum += pow(b.get_v().x - mean_velocity_.x, 2);
                                return sum;
                              });
 
   sum_v2.y = std::accumulate(std::begin(flock), std::end(flock), double{0.},
-                             [&](double sum, Boid const& b, Flock const& f) {
-                               sum += pow(b.get_v().y - f.mean_velocity_.y, 2);
+                             [&](double sum, Boid const& b) {
+                               sum += pow(b.get_v().y - mean_velocity_.y, 2);
                                return sum;
                              });
 

@@ -42,6 +42,8 @@ int main() {
   // setting the framerate
   window.setFramerateLimit(static_cast<unsigned int>(frame));
 
+  std::cout<<"Mean Position X \t Standard Dev "<< "\t Mean Position Y \t Standard Dev \t "<<"Mean Velocity X \t Standard Dev \t "<<"Mean Velocity Y \t Standard Dev\n"; 
+
   while (window.isOpen()) {
     sf::Event event;
     while (window.pollEvent(event)) {
@@ -67,19 +69,9 @@ int main() {
     }
     window.display();
 
-    std::cout << "Coordinates of the Mean Position of the flock: "
-              << Flock_Class.get_mean_p().x << ", "
-              << Flock_Class.get_mean_p().y << '\n';
-    std::cout << "Standard Deviations associated to the Coordinates of the "
-                 "Mean Position: "
-              << Flock_Class.get_std_dev_p().x << ", "
-              << Flock_Class.get_std_dev_p().y << '\n';
-    std::cout << "Coordinates of the Mean Velocity of the flock: "
-              << Flock_Class.get_mean_v().x << ", "
-              << Flock_Class.get_mean_v().y << '\n';
-    std::cout << "Standard Deviations associated to the Coordinates of the "
-                 "Mean Velocity: "
-              << Flock_Class.get_std_dev_v().x << ", "
-              << Flock_Class.get_std_dev_v().y << '\n';
+    std::cout << Flock_Class.get_mean_p().x << "\t"<<Flock_Class.get_std_dev_p().x << "\t"
+              << Flock_Class.get_mean_p().y << "\t"<<Flock_Class.get_std_dev_p().y <<"\t"
+              << Flock_Class.get_mean_v().x << "\t"<<Flock_Class.get_std_dev_v().x << "\t"
+              << Flock_Class.get_mean_v().y << "\t"<<Flock_Class.get_std_dev_v().y << "\n";
   }
 }
