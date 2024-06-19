@@ -30,19 +30,16 @@ int main() {
     flock.push_back(birds::Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
   }
 
-  birds::Flock Flock_Class;
-  Flock_Class.mean_position(flock);
-  Flock_Class.mean_velocity(flock);
-  Flock_Class.std_dev_p(flock);
-  Flock_Class.std_dev_v(flock);
-
   // graphic
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
 
   // setting the framerate
   window.setFramerateLimit(static_cast<unsigned int>(frame));
 
-  std::cout<<"Mean Position X \t Standard Dev "<< "\t Mean Position Y \t Standard Dev \t "<<"Mean Velocity X \t Standard Dev \t "<<"Mean Velocity Y \t Standard Dev\n"; 
+  std::cout << "Mean Position X \t Mean Position Y   "
+            << "\t Standard Dev X \t Standard Dev Y \t "
+            << "Mean Velocity X \t Mean Velocity Y \t "
+            << "Standard Dev X \t Standard Dev Y \n";
 
   while (window.isOpen()) {
     sf::Event event;
@@ -69,9 +66,19 @@ int main() {
     }
     window.display();
 
-    std::cout << Flock_Class.get_mean_p().x << "\t"<<Flock_Class.get_std_dev_p().x << "\t"
-              << Flock_Class.get_mean_p().y << "\t"<<Flock_Class.get_std_dev_p().y <<"\t"
-              << Flock_Class.get_mean_v().x << "\t"<<Flock_Class.get_std_dev_v().x << "\t"
-              << Flock_Class.get_mean_v().y << "\t"<<Flock_Class.get_std_dev_v().y << "\n";
+    birds::Flock Flock_Class;
+    Flock_Class.mean_position(flock);
+    Flock_Class.mean_velocity(flock);
+    Flock_Class.std_dev_p(flock);
+    Flock_Class.std_dev_v(flock);
+
+    std::cout << Flock_Class.get_mean_p().x << "\t"
+              << Flock_Class.get_mean_p().y << "\t"
+              << Flock_Class.get_std_dev_p().x << "\t"
+              << Flock_Class.get_std_dev_p().y << "\t"
+              << Flock_Class.get_mean_v().x << "\t"
+              << Flock_Class.get_mean_v().y << "\t"
+              << Flock_Class.get_std_dev_v().x << "\t"
+              << Flock_Class.get_std_dev_v().y << "\n";
   }
 }
