@@ -32,7 +32,7 @@ target_link_libraries(boids PRIVATE sfml-graphics)
 if (BUILD_TESTING)
 
   # aggiungi l'eseguibile all.t
-  add_executable(boids.t twodimensional.test.cpp twodimensional.cpp birds.test.cpp birds.cpp)
+  add_executable(boids.t test.cpp twodimensional.cpp birds.cpp)
   # aggiungi l'eseguibile all.t alla lista dei test
   add_test(NAME boids.t COMMAND boids.t)
 
