@@ -1,7 +1,9 @@
 #include <SFML/Graphics.hpp>
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <random>
+
 #include "birds.hpp"
 
 // Main
@@ -25,13 +27,19 @@ int main() {
   // flock generarion
   std::vector<birds::Boid> flock;
   for (int i = 0; i < num_boids; ++i) {
-    flock.push_back( birds::Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
+    flock.push_back(birds::Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
   }
+
   // graphic
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
 
   // setting the framerate
   window.setFramerateLimit(static_cast<unsigned int>(frame));
+
+  std::cout << "Mean Position X \t Mean Position Y   "
+            << "\t Standard Dev X \t Standard Dev Y \t "
+            << "Mean Velocity X \t Mean Velocity Y \t "
+            << "Standard Dev X \t Standard Dev Y \n";
 
   while (window.isOpen()) {
     sf::Event event;
@@ -42,7 +50,7 @@ int main() {
     }
     window.clear(sf::Color(135, 206, 250));
     for (auto& boid : flock) {
-      // The circle rappresent a boid
+      // The circle rappresents a boid
       sf::CircleShape circle(1);
       boid.update_v(boid.separation(flock, s, d_s), boid.alignment(flock, a, d),
                     boid.cohesion(flock, c, d));
@@ -50,11 +58,27 @@ int main() {
       boid.borders();
 
       // Setting the position of the circle
-      circle.setPosition(static_cast<float>(boid.get_p().x), static_cast<float>(boid.get_p().y));
+      circle.setPosition(static_cast<float>(boid.get_p().x),
+                         static_cast<float>(boid.get_p().y));
 
       circle.setFillColor(sf::Color::Black);
       window.draw(circle);
     }
     window.display();
+
+    birds::Flock Flock_Class;
+    Flock_Class.mean_position(flock);
+    Flock_Class.mean_velocity(flock);
+    Flock_Class.std_dev_p(flock);
+    Flock_Class.std_dev_v(flock);
+
+    std::cout << Flock_Class.get_mean_p().x << "\t"
+              << Flock_Class.get_mean_p().y << "\t"
+              << Flock_Class.get_std_dev_p().x << "\t"
+              << Flock_Class.get_std_dev_p().y << "\t"
+              << Flock_Class.get_mean_v().x << "\t"
+              << Flock_Class.get_mean_v().y << "\t"
+              << Flock_Class.get_std_dev_v().x << "\t"
+              << Flock_Class.get_std_dev_v().y << "\n";
   }
 }
