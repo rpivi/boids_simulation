@@ -36,10 +36,10 @@ int main() {
   // setting the framerate
   window.setFramerateLimit(static_cast<unsigned int>(frame));
 
-  std::cout << "Mean Position X \t Mean Position Y   "
-            << "\t Standard Dev X \t Standard Dev Y \t "
-            << "Mean Velocity X \t Mean Velocity Y \t "
-            << "Standard Dev X \t Standard Dev Y \n";
+  std::cout << "Mean Position X   Mean Position Y  "
+            << "Standard Dev X  Standard Dev Y  "
+            << "Mean Velocity X  Mean Velocity Y  "
+            << "Standard Dev X  Standard Dev Y \n";
 
   while (window.isOpen()) {
     sf::Event event;
@@ -72,13 +72,13 @@ int main() {
     Flock_Statistics.std_dev_p(flock);
     Flock_Statistics.std_dev_v(flock);
 
-    std::cout << Flock_Statistics.get_mean_p().x << "\t"
-              << Flock_Statistics.get_mean_p().y << "\t"
-              << Flock_Statistics.get_std_dev_p().x << "\t"
-              << Flock_Statistics.get_std_dev_p().y << "\t"
-              << Flock_Statistics.get_mean_v().x << "\t"
-              << Flock_Statistics.get_mean_v().y << "\t"
-              << Flock_Statistics.get_std_dev_v().x << "\t"
+    std::cout << Flock_Statistics.get_mean_p().x << "\t\t  "
+              << Flock_Statistics.get_mean_p().y << "\t   "
+              << Flock_Statistics.get_std_dev_p().x << "\t   "
+              << Flock_Statistics.get_std_dev_p().y << "\t   "
+              << Flock_Statistics.get_mean_v().x << "\t    "
+              << Flock_Statistics.get_mean_v().y << "\t     "
+              << Flock_Statistics.get_std_dev_v().x << "\t     "
               << Flock_Statistics.get_std_dev_v().y << "\n";
   }
 }
