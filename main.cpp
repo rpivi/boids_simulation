@@ -66,19 +66,19 @@ int main() {
     }
     window.display();
 
-    birds::Flock Flock_Class;
-    Flock_Class.mean_position(flock);
-    Flock_Class.mean_velocity(flock);
-    Flock_Class.std_dev_p(flock);
-    Flock_Class.std_dev_v(flock);
+    birds::Flock Flock_Statistics;
+    Flock_Statistics.mean_position(flock);
+    Flock_Statistics.mean_velocity(flock);
+    Flock_Statistics.std_dev_p(flock);
+    Flock_Statistics.std_dev_v(flock);
 
-    std::cout << Flock_Class.get_mean_p().x << "\t"
-              << Flock_Class.get_mean_p().y << "\t"
-              << Flock_Class.get_std_dev_p().x << "\t"
-              << Flock_Class.get_std_dev_p().y << "\t"
-              << Flock_Class.get_mean_v().x << "\t"
-              << Flock_Class.get_mean_v().y << "\t"
-              << Flock_Class.get_std_dev_v().x << "\t"
-              << Flock_Class.get_std_dev_v().y << "\n";
+    std::cout << Flock_Statistics.get_mean_p().x << "\t"
+              << Flock_Statistics.get_mean_p().y << "\t"
+              << Flock_Statistics.get_std_dev_p().x << "\t"
+              << Flock_Statistics.get_std_dev_p().y << "\t"
+              << Flock_Statistics.get_mean_v().x << "\t"
+              << Flock_Statistics.get_mean_v().y << "\t"
+              << Flock_Statistics.get_std_dev_v().x << "\t"
+              << Flock_Statistics.get_std_dev_v().y << "\n";
   }
 }
