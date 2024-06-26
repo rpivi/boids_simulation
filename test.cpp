@@ -1,10 +1,8 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include "birds.hpp"
-#include "twodimensional.hpp"
-
 #include "doctest.h"
-
+#include "twodimensional.hpp"
 
 TEST_CASE("Testing the near function ") {
   // true
@@ -81,8 +79,6 @@ TEST_CASE("Testing the near function ") {
     CHECK(p2.near(p1, d) == false);
   }
 }
-
-
 
 /*TEST_CASE("Testing the update_v and update_p functions") {
   SUBCASE("simple test") {
