@@ -2,7 +2,9 @@
 
 #include "birds.hpp"
 #include "doctest.h"
-#include "twodimensional.hpp"
+
+//test for birds
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Testing the near function ") {
   // true
@@ -80,47 +82,51 @@ TEST_CASE("Testing the near function ") {
   }
 }
 
-/*TEST_CASE("Testing the update_v and update_p functions") {
+TEST_CASE("Testing the update_v and update_p functions") {
   SUBCASE("simple test") {
     two_dim::vec v1{0., 0.};
     two_dim::vec v2{0., 0.};
     two_dim::vec v3{0., 0.};
     birds::Boid p1{1., 1., 1., 1.};
-    double delta = 1;
+    double delta = 1.;
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
-    CHECK(p1.get_v().x == 1);
-    CHECK(p1.get_v().y == 1);
-    CHECK(p1.get_p().x == 2);
-    CHECK(p1.get_p().y == 2);
+    CHECK(p1.get_v().x == 1.);
+    CHECK(p1.get_v().y == 1.);
+    CHECK(p1.get_p().x == 2.);
+    CHECK(p1.get_p().y == 2.);
   }
   SUBCASE("test 1") {
     two_dim::vec v1{1., 6.};
     two_dim::vec v2{5., 8.};
     two_dim::vec v3{40., 6.};
     birds::Boid p1{1., 1., 700., 200.};
-    double delta = 1 / 60;
+    double delta = 1. / 60.;
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
-    CHECK(p1.get_v().x == 746);
-    CHECK(p1.get_v().y == 220);
-    CHECK(p1.get_p().x == 1 + 746 / 60);
-    CHECK(p1.get_p().y == 1 + 220 / 60);
+    CHECK(p1.get_v().x == 746.);
+    CHECK(p1.get_v().y == 220.);
+    CHECK(p1.get_p().x == 1. + 746. / 60);
+    CHECK(p1.get_p().y == 1. + 220. / 60);
   }
   SUBCASE("test_ 2") {
     two_dim::vec v1{1., -6.};
     two_dim::vec v2{-5., 8.};
     two_dim::vec v3{40., -6.};
-    double delta = 1 / 10;
+    double delta = 1. / 10;
     birds::Boid p1{800., 500., -700., 200.};
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
-    CHECK(p1.get_v().x == -664);
-    CHECK(p1.get_v().y == 196);
-    CHECK(p1.get_p().x == 800 - 646 / 10);
-    CHECK(p1.get_p().y == 500 + 196 / 10);
+    CHECK(p1.get_v().x == -664.);
+    CHECK(p1.get_v().y == 196.);
+    CHECK(p1.get_p().x == 800. - 646. / 10);
+    CHECK(p1.get_p().y == 500. + 196. / 10);
   }
-}*/
+}
+
+
+//test for twodimensional
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Testing the distance function ") {
   SUBCASE("The diagonal of a square") {
@@ -171,6 +177,7 @@ TEST_CASE("Testing the norm function ") {
     CHECK(two_dim::norm(p) == doctest::Approx(232.412));
   }
 }
+
 
 TEST_CASE("Testing the distance function ") {
   SUBCASE("The distance from origin") {

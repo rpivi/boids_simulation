@@ -6,6 +6,24 @@
 
 #include "birds.hpp"
 
+sf::ConvexShape createTriangle(const sf::Vector2f& position, const sf::Vector2f& velocity) {
+    sf::ConvexShape triangle;
+    triangle.setPointCount(3);
+    triangle.setPoint(0, sf::Vector2f(0, -5)); // Top point
+    triangle.setPoint(1, sf::Vector2f(-3, 3)); // Bottom left point
+    triangle.setPoint(2, sf::Vector2f(3, 3));  // Bottom right point
+
+    // Calculate the angle of rotation based on the velocity
+    float angle = std::atan2(velocity.y, velocity.x) * static_cast<float>(180. / 3.141592);
+    triangle.setRotation(angle + 90); // Rotate by 90 degrees to align the point upwards
+
+    triangle.setPosition(position);
+    triangle.setFillColor(sf::Color::Black);
+
+    return triangle;
+}
+
+
 // Main
 int main() {
   double frame{60};
@@ -13,8 +31,8 @@ int main() {
 
   std::random_device r;
   std::default_random_engine eng(r());
-  std::uniform_real_distribution<> dis(250., 600.);
-  std::uniform_real_distribution<> dis2(-1., 1.);
+  std::uniform_real_distribution<> dis(400., 500.);
+  std::uniform_real_distribution<> dis2(-3., 3.);
 
   double num_boids{0.};
   double d_s{0.};
@@ -30,7 +48,7 @@ int main() {
     flock.push_back(birds::Boid(dis(eng), dis(eng), dis2(eng), dis2(eng)));
   }
 
-  // graphic
+  // the window
   sf::RenderWindow window(sf::VideoMode(900, 900), "Boids");
 
   // setting the framerate
@@ -48,21 +66,25 @@ int main() {
         window.close();
       }
     }
+    //clear the window - background color blue as the sky
     window.clear(sf::Color(135, 206, 250));
+
+    //boids out of the windows must come back - toroidal space
+    for(auto& boid: flock){
+      boid.borders();
+    }
+
+    //updating the flock 
     for (auto& boid : flock) {
-      // The circle rappresents a boid
-      sf::CircleShape circle(1);
       boid.update_v(boid.separation(flock, s, d_s), boid.alignment(flock, a, d),
                     boid.cohesion(flock, c, d));
       boid.update_p(delta);
-      boid.borders();
 
-      // Setting the position of the circle
-      circle.setPosition(static_cast<float>(boid.get_p().x),
-                         static_cast<float>(boid.get_p().y));
+      //the boids are a black triangle
+      sf::ConvexShape triangle = createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),static_cast<float>(boid.get_p().y)),
+                                                  sf::Vector2f(static_cast<float>(boid.get_v().x), static_cast<float>(boid.get_v().y)));
 
-      circle.setFillColor(sf::Color::Black);
-      window.draw(circle);
+      window.draw(triangle);
     }
     window.display();
 
