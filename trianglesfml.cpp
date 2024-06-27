@@ -1,4 +1,4 @@
-#include"trianglesfml"
+#include"trianglesfml.hpp"
 
 namespace tr{
 
