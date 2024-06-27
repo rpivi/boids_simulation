@@ -125,7 +125,13 @@ TEST_CASE("Testing the update_v and update_p functions") {
 }
 
 TEST_CASE("Testing the update_v and update_p functions") {
-  std::vector<birds::Boid> flock{{0.,0.,0.,0.},{1.,1.,1.,1.}};
+  SUBCASE("simple test") {
+    std::vector<birds::Boid> flock{{2., 2., 2., 2.}, {1., 1., 1., 1.}};
+    float d{20.};
+    birds::Boid c{0., 0., 0., 0.};
+    CHECK(c.center_mass(flock, d).x == 1.5);
+    CHECK(c.center_mass(flock, d).y == 1.5);
+  }
 }
 
 // test for twodimensional
