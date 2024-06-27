@@ -66,7 +66,7 @@ int main() {
       boid.update_p(delta);
 
       //the boids are a black triangle
-      tr::sf::ConvexShape triangle = createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),static_cast<float>(boid.get_p().y)),
+      sf::ConvexShape triangle = tr::createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),static_cast<float>(boid.get_p().y)),
                                                   sf::Vector2f(static_cast<float>(boid.get_v().x), static_cast<float>(boid.get_v().y)));
 
       window.draw(triangle);
