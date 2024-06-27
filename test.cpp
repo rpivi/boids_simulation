@@ -3,7 +3,7 @@
 #include "birds.hpp"
 #include "doctest.h"
 
-//test for birds
+// test for birds
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Testing the near function ") {
@@ -119,13 +119,16 @@ TEST_CASE("Testing the update_v and update_p functions") {
     p1.update_p(delta);
     CHECK(p1.get_v().x == -664.);
     CHECK(p1.get_v().y == 196.);
-    CHECK(p1.get_p().x == 800. - 646. / 10);
+    CHECK(p1.get_p().x == 800. - 664. / 10);
     CHECK(p1.get_p().y == 500. + 196. / 10);
   }
 }
 
+TEST_CASE("Testing the update_v and update_p functions") {
+  std::vector<birds::Boid> flock{{0.,0.,0.,0.},{1.,1.,1.,1.}};
+}
 
-//test for twodimensional
+// test for twodimensional
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TEST_CASE("Testing the distance function ") {
@@ -177,7 +180,6 @@ TEST_CASE("Testing the norm function ") {
     CHECK(two_dim::norm(p) == doctest::Approx(232.412));
   }
 }
-
 
 TEST_CASE("Testing the distance function ") {
   SUBCASE("The distance from origin") {
