@@ -1,27 +1,10 @@
-#include <SFML/Graphics.hpp>
 #include <cassert>
 #include <cmath>
 #include <iostream>
 #include <random>
 
 #include "birds.hpp"
-
-sf::ConvexShape createTriangle(const sf::Vector2f& position, const sf::Vector2f& velocity) {
-    sf::ConvexShape triangle;
-    triangle.setPointCount(3);
-    triangle.setPoint(0, sf::Vector2f(0, -5)); // Top point
-    triangle.setPoint(1, sf::Vector2f(-3, 3)); // Bottom left point
-    triangle.setPoint(2, sf::Vector2f(3, 3));  // Bottom right point
-
-    // Calculate the angle of rotation based on the velocity
-    float angle = std::atan2(velocity.y, velocity.x) * static_cast<float>(180. / 3.141592);
-    triangle.setRotation(angle + 90); // Rotate by 90 degrees to align the point upwards
-
-    triangle.setPosition(position);
-    triangle.setFillColor(sf::Color::Black);
-
-    return triangle;
-}
+#include "trianglesfml.hpp"
 
 
 // Main
@@ -29,6 +12,7 @@ int main() {
   double frame{60};
   double delta{1 / frame};
 
+  //random generation
   std::random_device r;
   std::default_random_engine eng(r());
   std::uniform_real_distribution<> dis(400., 500.);
@@ -54,6 +38,7 @@ int main() {
   // setting the framerate
   window.setFramerateLimit(static_cast<unsigned int>(frame));
 
+  // the output in the terminal and in the window
   std::cout << "Mean Position X   Mean Position Y  "
             << "Standard Dev X  Standard Dev Y  "
             << "Mean Velocity X  Mean Velocity Y  "
@@ -69,7 +54,7 @@ int main() {
     //clear the window - background color blue as the sky
     window.clear(sf::Color(135, 206, 250));
 
-    //boids out of the windows must come back - toroidal space
+    //boids out of the window must come back - toroidal space
     for(auto& boid: flock){
       boid.borders();
     }
@@ -81,7 +66,7 @@ int main() {
       boid.update_p(delta);
 
       //the boids are a black triangle
-      sf::ConvexShape triangle = createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),static_cast<float>(boid.get_p().y)),
+      tr::sf::ConvexShape triangle = createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),static_cast<float>(boid.get_p().y)),
                                                   sf::Vector2f(static_cast<float>(boid.get_v().x), static_cast<float>(boid.get_v().y)));
 
       window.draw(triangle);
