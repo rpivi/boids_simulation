@@ -46,6 +46,17 @@ bool Boid::near(Boid const& other, double d) const {
 void Boid::update_v(two_dim::vec const& v1, two_dim::vec const& v2,
                     two_dim::vec const& v3) {
   velocity_ = velocity_ + v1 + v2 + v3;
+
+  // maximum velocity
+  if (two_dim::norm(velocity_) > 150.) {
+    if (velocity_.x == 0.) {
+      velocity_.y = 150.;
+    } else {
+      double const angle{std::atan2(velocity_.y, velocity_.x)};
+      velocity_.x = 150. * std::cos(angle);
+      velocity_.y = 150. * std::sin(angle);
+    }
+  }
 }
 
 void Boid::update_p(double delta_t) {

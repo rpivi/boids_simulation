@@ -12,7 +12,7 @@ sf::ConvexShape createTriangle(const sf::Vector2f& position, const sf::Vector2f&
     triangle.setPoint(2, sf::Vector2f(3, 3));  // Bottom right point
 
     // Calculate the angle of rotation based on the velocity
-    float angle = std::atan2(velocity.y, velocity.x) * static_cast<float>(180. / 3.141592);
+    float angle = std::atan2(velocity.y, velocity.x) * static_cast<float>(180. / 3.141593);
     triangle.setRotation(angle + 90); // Rotate by 90 degrees to align the point upwards
 
     triangle.setPosition(position);
