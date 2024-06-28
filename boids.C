@@ -12,7 +12,7 @@ void grafico(){
 
     // Cosmetics
     p->SetMarkerStyle(kOpenCircle);
-    p->SetMarkerColor(kBlue);
+    p->SetMarkerColor(kBlack);
     p->SetLineColor(kBlue);
 
     // The canvas on which we'll draw the graph
