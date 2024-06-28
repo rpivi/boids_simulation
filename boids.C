@@ -7,22 +7,17 @@ void setStyle(){
 void grafico(){
 
     // Instance of the graph
-    TGraphErrors * graph =new TGraphErrors(n_points,x_vals,y_vals,0,y_errs); 
-
-    graph->SetTitle("Posizioni");
+    TGraphErrors * p =new TGraphErrors("position.dat", "%lg%lg%lg%lg");
+    //x,y,xerr,yerr 
 
     // Cosmetics
-    graph->SetMarkerStyle(kOpenCircle);
-    graph->SetMarkerColor(kBlue);
-    graph->SetLineColor(kBlue);
+    p->SetMarkerStyle(kOpenCircle);
+    p->SetMarkerColor(kBlue);
+    p->SetLineColor(kBlue);
 
     // The canvas on which we'll draw the graph
-    TCanvas *myCanvas = new TCanvas();
+    TCanvas *canvas_p = new TCanvas("canvas_p","Posizioni",1000,1000);
+    p->Draw("APE");
 
-    gStyle->SetOptFit(111);
-    graph->Draw("APE");
- 
-    leg->Draw("Same");
-
-    myCanvas->Print("Posizioni.gif");
+    canvas_p->Print("Posizioni.gif");
 }
