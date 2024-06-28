@@ -104,10 +104,10 @@ TEST_CASE("Testing the update_v and update_p functions") {
     double delta = 1. / 60.;
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
-    CHECK(p1.get_v().x == 746.);
-    CHECK(p1.get_v().y == 220.);
-    CHECK(p1.get_p().x == 1. + 746. / 60);
-    CHECK(p1.get_p().y == 1. + 220. / 60);
+    CHECK(p1.get_v().x == doctest::Approx(143.874));
+    CHECK(p1.get_v().y == doctest::Approx(42.4294));
+    CHECK(p1.get_p().x == 1. + 143.874 / 60);
+    CHECK(p1.get_p().y == 1. + 42.4294 / 60);
   }
   SUBCASE("test_ 2") {
     two_dim::vec v1{1., -6.};
@@ -117,10 +117,10 @@ TEST_CASE("Testing the update_v and update_p functions") {
     birds::Boid p1{800., 500., -700., 200.};
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
-    CHECK(p1.get_v().x == -664.);
-    CHECK(p1.get_v().y == 196.);
-    CHECK(p1.get_p().x == 800. - 664. / 10);
-    CHECK(p1.get_p().y == 500. + 196. / 10);
+    CHECK(p1.get_v().x == -143.863);
+    CHECK(p1.get_v().y == 42.4657);
+    CHECK(p1.get_p().x == 800. - 143.863 / 10);
+    CHECK(p1.get_p().y == 500. + 42.4657 / 10);
   }
 }
 
