@@ -106,21 +106,35 @@ TEST_CASE("Testing the update_v and update_p functions") {
     p1.update_p(delta);
     CHECK(p1.get_v().x == doctest::Approx(143.874));
     CHECK(p1.get_v().y == doctest::Approx(42.4294));
-    CHECK(p1.get_p().x == 1. + 143.874 / 60);
-    CHECK(p1.get_p().y == 1. + 42.4294 / 60);
+    CHECK(p1.get_p().x == doctest::Approx(1. + 143.874 / 60));
+    CHECK(p1.get_p().y == doctest::Approx(1. + 42.4294 / 60));
   }
-  SUBCASE("test_ 2") {
+  SUBCASE("test 2") {
     two_dim::vec v1{1., -6.};
     two_dim::vec v2{-5., 8.};
     two_dim::vec v3{40., -6.};
-    double delta = 1. / 10;
+    double delta = 1. / 10.;
     birds::Boid p1{800., 500., -700., 200.};
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
-    CHECK(p1.get_v().x == -143.863);
-    CHECK(p1.get_v().y == 42.4657);
-    CHECK(p1.get_p().x == 800. - 143.863 / 10);
-    CHECK(p1.get_p().y == 500. + 42.4657 / 10);
+    CHECK(p1.get_v().x == doctest::Approx(-143.863));
+    CHECK(p1.get_v().y == doctest::Approx(42.4657));
+    CHECK(p1.get_p().x == doctest::Approx(800. - 143.863 / 10));
+    CHECK(p1.get_p().y == doctest::Approx(500. + 42.4657 / 10));
+  }
+
+  SUBCASE("test 3") {
+    two_dim::vec v1{1., 0.};
+    two_dim::vec v2{10., 10.};
+    two_dim::vec v3{25., 0.};
+    double delta = 1. / 30.;
+    birds::Boid p1{0., 900., 10., 0.};
+    p1.update_v(v1, v2, v3);
+    p1.update_p(delta);
+    CHECK(p1.get_v().x == 46.);
+    CHECK(p1.get_v().y == 10.);
+    CHECK(p1.get_p().x == doctest::Approx(46. / 30.));
+    CHECK(p1.get_p().y == doctest::Approx(900. + 10. / 30.));
   }
 }
 
