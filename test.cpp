@@ -124,13 +124,112 @@ TEST_CASE("Testing the update_v and update_p functions") {
   }
 }
 
-TEST_CASE("Testing the update_v and update_p functions") {
+TEST_CASE("Testing the center_mass function") {
   SUBCASE("simple test") {
     std::vector<birds::Boid> flock{{2., 2., 2., 2.}, {1., 1., 1., 1.}};
-    float d{20.};
+    double d{20.};
     birds::Boid c{0., 0., 0., 0.};
     CHECK(c.center_mass(flock, d).x == 1.5);
     CHECK(c.center_mass(flock, d).y == 1.5);
+  }
+  SUBCASE("test 1") {
+    std::vector<birds::Boid> flock{
+        {2., 2., 0., 0.}, {1., 1., 0., 0.}, {800., 850., 0., 0.}};
+    double d{20.};
+    birds::Boid c{801., 849., 0., 0.};
+    CHECK(c.center_mass(flock, d).x == 800.);
+    CHECK(c.center_mass(flock, d).y == 850.);
+  }
+  SUBCASE("test 2") {
+    std::vector<birds::Boid> flock{{2., 2., 0., 0.},
+                                   {1., 1., 0., 0.},
+                                   {800., 850., 3., 0.},
+                                   {802., 856., 0., 0.}};
+    double d{20.};
+    birds::Boid c{801., 849., 0., 0.};
+    CHECK(c.center_mass(flock, d).x == 801.);
+    CHECK(c.center_mass(flock, d).y == 853.);
+  }
+  SUBCASE("test 3") {
+    std::vector<birds::Boid> flock{{2., 2., 0., 0.},     {1., 1., 0., 0.},
+                                   {800., 850., 0., 0.}, {802., 856., 0., 0.},
+                                   {803., 852., 0., 0.}, {810., 848., 0., 0.}};
+    double d{20.};
+    birds::Boid c{801., 849., 0., 0.};
+    CHECK(c.center_mass(flock, d).x == 803.75);
+    CHECK(c.center_mass(flock, d).y == 851.5);
+  }
+  SUBCASE("test 4") {
+    std::vector<birds::Boid> flock{{2., 2., 0., 0.},     {1., 1., 0., 0.},
+                                   {800., 850., 0., 0.}, {802., 856., 0., 0.},
+                                   {803., 852., 0., 0.}, {810., 848., 0., 0.},
+                                   {850., 848., 0., 0.}};
+    double d{20.};
+    birds::Boid c{801., 849., 0., 0.};
+    CHECK(c.center_mass(flock, d).x == 803.75);
+    CHECK(c.center_mass(flock, d).y == 851.5);
+  }
+  SUBCASE("test 5") {
+    std::vector<birds::Boid> flock{
+        {2., 2., 0., 0.},
+        {1., 1., 0., 0.},
+    };
+    float d{20.};
+    birds::Boid c{801., 849., 0., 0.};
+    CHECK(c.center_mass(flock, d).x == 0.);
+    CHECK(c.center_mass(flock, d).y == 0.);
+  }
+}
+
+TEST_CASE("Testing the separation function") {
+  SUBCASE("simple test") {
+    std::vector<birds::Boid> flock{
+        {2., 2., 2., 2.}, {2., 2., 2., 2.}, {2., 2., 2., 2.}};
+    double d_separation{6};
+    double s{0.02};
+    birds::Boid boid{0., 0., 0., 0.};
+    CHECK(boid.separation(flock, s, d_separation).x == -0.12);
+    CHECK(boid.separation(flock, s, d_separation).y == -0.12);
+  }
+  SUBCASE("test 1") {
+    std::vector<birds::Boid> flock{
+        {50., 2., 2., 2.}, {4., 7., -20., 20.}, {2., 2., 70., -30.}};
+    double d_separation{6};
+    double s{0.02};
+    birds::Boid boid{0., 0., 0., 0.};
+    CHECK(boid.separation(flock, s, d_separation).x == -0.04);
+    CHECK(boid.separation(flock, s, d_separation).y == -0.04);
+  }
+  SUBCASE("test 2") {
+    std::vector<birds::Boid> flock{
+        {50., 2., 2., 2.}, {4., 3., -20., 20.}, {2., 2., 70., -30.}};
+    double d_separation{6};
+    double s{0.02};
+    birds::Boid boid{3., 3., 0., 0.};
+    CHECK(boid.separation(flock, s, d_separation).x == 0.);
+    CHECK(boid.separation(flock, s, d_separation).y == 0.02);
+  }
+  SUBCASE("test 3") {
+    std::vector<birds::Boid> flock{{50., 2., 2., 2.},
+                                   {4., 3., -20., 20.},
+                                   {2., 2., 70., -30.},
+                                   {4., 4., 70., -30.},
+                                   {7., 10., 70., -30.}};
+    double d_separation{20};
+    double s{0.02};
+    birds::Boid boid{3., 3., 1., 1.};
+    CHECK(boid.separation(flock, s, d_separation).x == -0.1);
+    CHECK(boid.separation(flock, s, d_separation).y == -0.14);
+  }
+  SUBCASE("test 4") {
+    std::vector<birds::Boid> flock{{50., 2., 2., 2.},    {4., 3., -20., 20.},
+                                   {2., 2., 70., -30.},  {4., 4., 70., -30.},
+                                   {7., 10., 70., -30.}, {0., 0., 70., -30.}};
+    double d_separation{20};
+    double s{0.02};
+    birds::Boid boid{3., 3., 100., -200.};
+    CHECK(boid.separation(flock, s, d_separation).x == -0.04);
+    CHECK(boid.separation(flock, s, d_separation).y == -0.08);
   }
 }
 
