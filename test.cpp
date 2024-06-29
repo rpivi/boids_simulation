@@ -247,6 +247,65 @@ TEST_CASE("Testing the separation function") {
   }
 }
 
+TEST_CASE("testing the alignment function") {
+  SUBCASE("simple test") {
+    std::vector<birds::Boid> flock{{0., 0., 2., 2.}, {0., 0., 2., 2.}};
+    double d{6};
+    double a{1};
+    birds::Boid boid{0., 0., 2., 2.};
+    CHECK(boid.alignment(flock, a, d).x == 0.);
+    CHECK(boid.alignment(flock, a, d).y == 0.);
+  }
+  SUBCASE("test 1") {
+    std::vector<birds::Boid> flock{{50., 0., 2., 2.}, {0., 0., 3., 2.}};
+    double d{6};
+    double a{1};
+    birds::Boid boid{0., 0., 2., 2.};
+    CHECK(boid.alignment(flock, a, d).x == 1.);
+    CHECK(boid.alignment(flock, a, d).y == 0.);
+  }
+  SUBCASE("test 2") {
+    std::vector<birds::Boid> flock{
+        {50., 0., 2., 2.}, {0., 0., 3., 2.}, {0., 1., 3., 2.}};
+    double d{6};
+    double a{1};
+    birds::Boid boid{0., 0., 2., 2.};
+    CHECK(boid.alignment(flock, a, d).x == 1.);
+    CHECK(boid.alignment(flock, a, d).y == 0.);
+  }
+  SUBCASE("test 3") {
+    std::vector<birds::Boid> flock{{50., 0., 2., 2.},
+                                   {0., 0., 3., 2.},
+                                   {0., 1., 3., 2.},
+                                   {0., 1., 4., 2.}};
+    double d{6};
+    double a{1};
+    birds::Boid boid{0., 0., 2., 2.};
+    CHECK(boid.alignment(flock, a, d).x == doctest::Approx(4. / 3.));
+    CHECK(boid.alignment(flock, a, d).y == 0.);
+  }
+  SUBCASE("test 4") {
+    std::vector<birds::Boid> flock{{50., 0., 2., 2.}, {0., 0., 3., 2.},
+                                   {0., 1., 3., 2.},  {0., 1., 4., 2.},
+                                   {0., 30., 0., 4.}, {0., 0., 47., 60.}};
+    double d{6};
+    double a{1};
+    birds::Boid boid{0., 0., 2., 2.};
+    CHECK(boid.alignment(flock, a, d).x == 12.25);
+    CHECK(boid.alignment(flock, a, d).y == 14.5);
+  }
+  SUBCASE("test 5") {
+    std::vector<birds::Boid> flock{{50., 0., 2., 2.}, {0., 0., 3., 2.},
+                                   {0., 1., 3., 2.},  {0., 1., 4., 2.},
+                                   {0., 30., 0., 4.}, {1., 0., 47., 60.},{2.,3.,-30.,-20.}};
+    double d{6};
+    double a{0.5};
+    birds::Boid boid{0., 0., 2., 2.};
+    CHECK(boid.alignment(flock, a, d).x == 1.7);
+    CHECK(boid.alignment(flock, a, d).y == 3.6);
+  }
+}
+
 // test for twodimensional
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

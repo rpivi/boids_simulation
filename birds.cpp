@@ -49,10 +49,10 @@ void Boid::update_v(two_dim::vec const& v1, two_dim::vec const& v2,
 
   // maximum velocity
   if (two_dim::norm(velocity_) > 150.) {
-      double const angle{std::atan2(velocity_.y, velocity_.x)};
-      velocity_.x = 150. * std::cos(angle);
-      velocity_.y = 150. * std::sin(angle);
-    }
+    double const angle{std::atan2(velocity_.y, velocity_.x)};
+    velocity_.x = 150. * std::cos(angle);
+    velocity_.y = 150. * std::sin(angle);
+  }
 }
 
 void Boid::update_p(double delta_t) {
@@ -122,7 +122,7 @@ two_dim::vec Boid::alignment(std::vector<Boid> const& flock, double const& a,
                            return sum;
                          }
                        });
-  if (n > 1) {
+  if (n >= 1) {
     v2 = v2 / n;
     return (v2 - get_v()) * a;
   } else {
