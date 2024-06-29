@@ -4,20 +4,46 @@ void setStyle(){
   gStyle->SetOptTitle(0);
 }
 
-void grafico(){
+void boids(){
 
     // Instance of the graph
-    TGraphErrors * p =new TGraphErrors("position.dat", "%lg%lg%lg%lg");
-    //x,y,xerr,yerr 
+    TGraphErrors * px =new TGraphErrors("positionx.dat", "%lg%lg%*lg%lg");
+    TGraphErrors * py =new TGraphErrors("positiony.dat", "%lg%lg%*lg%lg");
+    TGraphErrors * vx =new TGraphErrors("velocityx.dat", "%lg%lg%*lg%lg");
+    TGraphErrors * vy =new TGraphErrors("velocityy.dat", "%lg%lg%*lg%lg");
 
     // Cosmetics
-    p->SetMarkerStyle(kOpenCircle);
-    p->SetMarkerColor(kBlack);
-    p->SetLineColor(kBlue);
+    px->SetMarkerStyle(kOpenCircle);
+    px->SetMarkerColor(kBlack);
+    px->SetLineColor(kBlue);
+
+    py->SetMarkerStyle(kOpenCircle);
+    py->SetMarkerColor(kBlack);
+    py->SetLineColor(kBlue);
+
+    vx->SetMarkerStyle(kOpenCircle);
+    vx->SetMarkerColor(kBlack);
+    vx->SetLineColor(kRed);
+
+    vy->SetMarkerStyle(kOpenCircle);
+    vy->SetMarkerColor(kBlack);
+    vy->SetLineColor(kRed);
 
     // The canvas on which we'll draw the graph
-    TCanvas *canvas_p = new TCanvas("canvas_p","Posizioni",1000,1000);
-    p->Draw("APE");
+    TCanvas *canvas = new TCanvas("Canvas","Posizioni e Velocità");
+    canvas->Divide(2,2);
 
-    canvas_p->Print("Posizioni.gif");
+    canvas->cd(1);
+    px->Draw("APE");
+
+    canvas->cd(2);
+    py->Draw("APE");
+
+    canvas->cd(3);
+    vx->Draw("APE");
+
+    canvas->cd(4);
+    vy->Draw("APE");
+
+    canvas_p->Print("Boids.gif");
 }
