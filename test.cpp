@@ -250,16 +250,16 @@ TEST_CASE("Testing the separation function") {
 TEST_CASE("testing the alignment function") {
   SUBCASE("simple test") {
     std::vector<birds::Boid> flock{{0., 0., 2., 2.}, {0., 0., 2., 2.}};
-    double d{6};
-    double a{1};
+    double d{6.};
+    double a{1.};
     birds::Boid boid{0., 0., 2., 2.};
     CHECK(boid.alignment(flock, a, d).x == 0.);
     CHECK(boid.alignment(flock, a, d).y == 0.);
   }
   SUBCASE("test 1") {
     std::vector<birds::Boid> flock{{50., 0., 2., 2.}, {0., 0., 3., 2.}};
-    double d{6};
-    double a{1};
+    double d{6.};
+    double a{1.};
     birds::Boid boid{0., 0., 2., 2.};
     CHECK(boid.alignment(flock, a, d).x == 1.);
     CHECK(boid.alignment(flock, a, d).y == 0.);
@@ -267,8 +267,8 @@ TEST_CASE("testing the alignment function") {
   SUBCASE("test 2") {
     std::vector<birds::Boid> flock{
         {50., 0., 2., 2.}, {0., 0., 3., 2.}, {0., 1., 3., 2.}};
-    double d{6};
-    double a{1};
+    double d{6.};
+    double a{1.};
     birds::Boid boid{0., 0., 2., 2.};
     CHECK(boid.alignment(flock, a, d).x == 1.);
     CHECK(boid.alignment(flock, a, d).y == 0.);
@@ -278,8 +278,8 @@ TEST_CASE("testing the alignment function") {
                                    {0., 0., 3., 2.},
                                    {0., 1., 3., 2.},
                                    {0., 1., 4., 2.}};
-    double d{6};
-    double a{1};
+    double d{6.};
+    double a{1.};
     birds::Boid boid{0., 0., 2., 2.};
     CHECK(boid.alignment(flock, a, d).x == doctest::Approx(4. / 3.));
     CHECK(boid.alignment(flock, a, d).y == 0.);
@@ -288,21 +288,69 @@ TEST_CASE("testing the alignment function") {
     std::vector<birds::Boid> flock{{50., 0., 2., 2.}, {0., 0., 3., 2.},
                                    {0., 1., 3., 2.},  {0., 1., 4., 2.},
                                    {0., 30., 0., 4.}, {0., 0., 47., 60.}};
-    double d{6};
-    double a{1};
+    double d{6.};
+    double a{1.};
     birds::Boid boid{0., 0., 2., 2.};
     CHECK(boid.alignment(flock, a, d).x == 12.25);
     CHECK(boid.alignment(flock, a, d).y == 14.5);
   }
   SUBCASE("test 5") {
-    std::vector<birds::Boid> flock{{50., 0., 2., 2.}, {0., 0., 3., 2.},
-                                   {0., 1., 3., 2.},  {0., 1., 4., 2.},
-                                   {0., 30., 0., 4.}, {1., 0., 47., 60.},{2.,3.,-30.,-20.}};
+    std::vector<birds::Boid> flock{{50., 0., 2., 2.},   {0., 0., 3., 2.},
+                                   {0., 1., 3., 2.},    {0., 1., 4., 2.},
+                                   {0., 30., 0., 4.},   {1., 0., 47., 60.},
+                                   {2., 3., -30., -20.}};
     double d{6};
     double a{0.5};
     birds::Boid boid{0., 0., 2., 2.};
-    CHECK(boid.alignment(flock, a, d).x == 1.7);
-    CHECK(boid.alignment(flock, a, d).y == 3.6);
+    CHECK(boid.alignment(flock, a, d).x == doctest::Approx(1.7));
+    CHECK(boid.alignment(flock, a, d).y == doctest::Approx(3.6));
+  }
+}
+TEST_CASE("testing the cohesion function") {
+  SUBCASE("simple test") {
+    std::vector<birds::Boid> flock{{0., 0., 0., 0.}, {0., 0., 0., 0.}};
+    double c{1.};
+    double d{6.};
+    birds::Boid boid{0., 0., 0., 0.};
+    CHECK(boid.cohesion(flock, c, d).x == 0.);
+    CHECK(boid.cohesion(flock, c, d).y == 0.);
+  }
+  SUBCASE("test 1") {
+    std::vector<birds::Boid> flock{{3., 3., 0., 0.}, {4., 4., 0., 0.}};
+    double c{1.};
+    double d{6.};
+    birds::Boid boid{0., 0., 0., 0.};
+    CHECK(boid.cohesion(flock, c, d).x == 3.5);
+    CHECK(boid.cohesion(flock, c, d).y == 3.5);
+  }
+  SUBCASE("test 2") {
+    std::vector<birds::Boid> flock{
+        {80., 3., 0., 0.}, {3., 3., 0., 0.}, {4., 4., 0., 0.}};
+    double c{1.};
+    double d{6.};
+    birds::Boid boid{0., 0., 0., 0.};
+    CHECK(boid.cohesion(flock, c, d).x == 3.5);
+    CHECK(boid.cohesion(flock, c, d).y == 3.5);
+  }
+  SUBCASE("test 3") {
+    std::vector<birds::Boid> flock{
+        {80., 3., 0., 0.}, {3., 3., 0., 0.}, {4., 4., 0., 0.}};
+    double c{1.};
+    double d{20.};
+    birds::Boid boid{8., 9., -40., 70.};
+    CHECK(boid.cohesion(flock, c, d).x == -4.5);
+    CHECK(boid.cohesion(flock, c, d).y == -5.5);
+  }
+  SUBCASE("test 4") {
+    std::vector<birds::Boid> flock{{80., 3., -40., 0.},
+                                   {3., 3., 0., 30.},
+                                   {4., 4., 60., 200.},
+                                   {7., 2., -10., 0.}};
+    double c{0.5};
+    double d{20.};
+    birds::Boid boid{8., 9., -40., 70.};
+    CHECK(boid.cohesion(flock, c, d).x == doctest::Approx(-5./3.));
+    CHECK(boid.cohesion(flock, c, d).y == -3.);
   }
 }
 
