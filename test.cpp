@@ -353,7 +353,59 @@ TEST_CASE("testing the cohesion function") {
     CHECK(boid.cohesion(flock, c, d).y == -3.);
   }
 }
+//test for statistics
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+TEST_CASE("testing the statistics functions"){
+  SUBCASE("simple test"){
+    birds::Flock flock_statistic;
+    std::vector<birds::Boid> flock {{0.,0.,0.,0.},{0.,0.,0.,0.}};
+    flock_statistic.mean_position(flock);
+    flock_statistic.mean_velocity(flock);
+    flock_statistic.std_dev_p(flock);
+    flock_statistic.std_dev_v(flock);
+    CHECK(flock_statistic.get_mean_p().x==0);
+    CHECK(flock_statistic.get_mean_p().y==0);
+    CHECK(flock_statistic.get_std_dev_p().x==0);
+    CHECK(flock_statistic.get_std_dev_p().y==0);
+    CHECK(flock_statistic.get_mean_v().x==0);
+    CHECK(flock_statistic.get_mean_v().y==0);
+    CHECK(flock_statistic.get_std_dev_v().x==0);
+    CHECK(flock_statistic.get_std_dev_v().y==0);
+  }
+  SUBCASE("test 1"){
+    birds::Flock flock_statistic;
+    std::vector<birds::Boid> flock {{1.,1.,1.,1.},{1.,1.,1.,1.}};
+    flock_statistic.mean_position(flock);
+    flock_statistic.mean_velocity(flock);
+    flock_statistic.std_dev_p(flock);
+    flock_statistic.std_dev_v(flock);
+    CHECK(flock_statistic.get_mean_p().x==1);
+    CHECK(flock_statistic.get_mean_p().y==1);
+    CHECK(flock_statistic.get_std_dev_p().x==0);
+    CHECK(flock_statistic.get_std_dev_p().y==0);
+    CHECK(flock_statistic.get_mean_v().x==1);
+    CHECK(flock_statistic.get_mean_v().y==1);
+    CHECK(flock_statistic.get_std_dev_v().x==0);
+    CHECK(flock_statistic.get_std_dev_v().y==0);
+  }
+  SUBCASE("test 2"){
+    birds::Flock flock_statistic;
+    std::vector<birds::Boid> flock {{1.,1.,1.,1.},{2.,2.,2.,2.}};
+    flock_statistic.mean_position(flock);
+    flock_statistic.mean_velocity(flock);
+    flock_statistic.std_dev_p(flock);
+    flock_statistic.std_dev_v(flock);
+    CHECK(flock_statistic.get_mean_p().x==1.5);
+    CHECK(flock_statistic.get_mean_p().y==1.5);
+    CHECK(flock_statistic.get_std_dev_p().x==0.5);
+    CHECK(flock_statistic.get_std_dev_p().y==0.5);
+    CHECK(flock_statistic.get_mean_v().x==1.5);
+    CHECK(flock_statistic.get_mean_v().y==1.5);
+    CHECK(flock_statistic.get_std_dev_v().x==0.5);
+    CHECK(flock_statistic.get_std_dev_v().y==0.5);
+  }
+}
 // test for twodimensional
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
