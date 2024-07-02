@@ -6,13 +6,12 @@
 #include "birds.hpp"
 #include "trianglesfml.hpp"
 
-
 // Main
 int main() {
   double frame{60};
   double delta{1 / frame};
 
-  //random generation
+  // random generation
   std::random_device r;
   std::default_random_engine eng(r());
   std::uniform_real_distribution<> dis(400., 500.);
@@ -51,41 +50,40 @@ int main() {
         window.close();
       }
     }
-    //clear the window - background color blue as the sky
+    // clear the window - background color blue as the sky
     window.clear(sf::Color(135, 206, 250));
 
-    //boids out of the window must come back - toroidal space
-    for(auto& boid: flock){
+    // boids out of the window must come back - toroidal space
+    for (auto& boid : flock) {
       boid.borders();
     }
 
-    //updating the flock 
+    // updating the flock
     for (auto& boid : flock) {
       boid.update_v(boid.separation(flock, s, d_s), boid.alignment(flock, a, d),
                     boid.cohesion(flock, c, d));
       boid.update_p(delta);
 
-      //the boids are a black triangle
-      sf::ConvexShape triangle = tr::createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),static_cast<float>(boid.get_p().y)),
-                                                  sf::Vector2f(static_cast<float>(boid.get_v().x), static_cast<float>(boid.get_v().y)));
+      // the boids are a black triangle
+      sf::ConvexShape triangle =
+          tr::createTriangle(sf::Vector2f(static_cast<float>(boid.get_p().x),
+                                          static_cast<float>(boid.get_p().y)),
+                             sf::Vector2f(static_cast<float>(boid.get_v().x),
+                                          static_cast<float>(boid.get_v().y)));
 
       window.draw(triangle);
     }
     window.display();
 
     birds::Flock Flock_Statistics;
-    Flock_Statistics.mean_position(flock);
-    Flock_Statistics.mean_velocity(flock);
-    Flock_Statistics.std_dev_p(flock);
-    Flock_Statistics.std_dev_v(flock);
 
-    std::cout << Flock_Statistics.get_mean_p().x << "\t\t  "
-              << Flock_Statistics.get_mean_p().y << "\t   "
-              << Flock_Statistics.get_std_dev_p().x << "\t   "
-              << Flock_Statistics.get_std_dev_p().y << "\t   "
-              << Flock_Statistics.get_mean_v().x << "\t    "
-              << Flock_Statistics.get_mean_v().y << "\t     "
-              << Flock_Statistics.get_std_dev_v().x << "\t     "
-              << Flock_Statistics.get_std_dev_v().y << "\n";
+    std::cout << Flock_Statistics.mean_position(flock).x << "\t\t  "
+              << Flock_Statistics.mean_position(flock).y << "\t   "
+              << Flock_Statistics.std_dev_p(flock).x << "\t   "
+              << Flock_Statistics.std_dev_p(flock).y << "\t   "
+              << Flock_Statistics.mean_velocity(flock).x << "\t    "
+              << Flock_Statistics.mean_velocity(flock).y << "\t     "
+              << Flock_Statistics.std_dev_v(flock).x << "\t     "
+              << Flock_Statistics.std_dev_v(flock).y << "\n";
   }
 }

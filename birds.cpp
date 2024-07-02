@@ -48,7 +48,7 @@ void Boid::update_v(two_dim::vec const& v1, two_dim::vec const& v2,
   velocity_ = velocity_ + v1 + v2 + v3;
 
   // maximum velocity
-  if (two_dim::norm(velocity_) > 200.) {
+  if (two_dim::norm(velocity_) > 150.) {
     double const angle{std::atan2(velocity_.y, velocity_.x)};
     velocity_.x = 150. * std::cos(angle);
     velocity_.y = 150. * std::sin(angle);
@@ -141,7 +141,7 @@ two_dim::vec Boid::cohesion(std::vector<Boid> const& flock, double const& c,
   return v3;
 }
 
-void Flock::mean_position(std::vector<Boid> const& flock) {
+two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
   auto N = static_cast<double>(std::size(flock));
 
   mean_position_.x =
@@ -159,9 +159,10 @@ void Flock::mean_position(std::vector<Boid> const& flock) {
                         return sum;
                       }) /
       N;
+  return mean_position_;
 }
 
-void Flock::std_dev_p(std::vector<Boid> const& flock) {
+two_dim::vec Flock::std_dev_p(std::vector<Boid> const& flock) {
   two_dim::vec sum_p2{};
   sum_p2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
                              [&](double sum, Boid const& b) {
@@ -180,9 +181,11 @@ void Flock::std_dev_p(std::vector<Boid> const& flock) {
   standard_dev_position_.x = sqrt(sum_p2.x / ((N - 1) * N));
 
   standard_dev_position_.y = sqrt(sum_p2.y / ((N - 1) * N));
+
+  return standard_dev_position_;
 }
 
-void Flock::mean_velocity(std::vector<Boid> const& flock) {
+two_dim::vec Flock::mean_velocity(std::vector<Boid> const& flock) {
   auto N = static_cast<double>(std::size(flock));
 
   mean_velocity_.x =
@@ -200,9 +203,11 @@ void Flock::mean_velocity(std::vector<Boid> const& flock) {
                         return sum;
                       }) /
       N;
+
+  return mean_velocity_;
 }
 
-void Flock::std_dev_v(std::vector<Boid> const& flock) {
+two_dim::vec Flock::std_dev_v(std::vector<Boid> const& flock) {
   auto N = static_cast<double>(std::size(flock));
   two_dim::vec sum_v2{};
   sum_v2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},
@@ -220,6 +225,8 @@ void Flock::std_dev_v(std::vector<Boid> const& flock) {
   standard_dev_velocity_.x = sqrt(sum_v2.x / (N * (N - 1)));
 
   standard_dev_velocity_.y = sqrt(sum_v2.y / (N * (N - 1)));
+
+  return standard_dev_velocity_;
 }
 
 }  // namespace birds

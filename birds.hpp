@@ -60,16 +60,11 @@ class Flock {
  public:
   // Constructor
   Flock() = default;
-  
-  two_dim::vec const get_mean_p() { return mean_position_; }
-  two_dim::vec const get_std_dev_p() { return standard_dev_position_; }
-  two_dim::vec const get_mean_v() { return mean_velocity_; }
-  two_dim::vec const get_std_dev_v() { return standard_dev_velocity_; }
 
-  void mean_position(std::vector<Boid> const& flock);
-  void std_dev_p(std::vector<Boid> const& flock);
-  void mean_velocity(std::vector<Boid> const& flock);
-  void std_dev_v(std::vector<Boid> const& flock);
+  two_dim::vec mean_position(std::vector<Boid> const& flock);
+  two_dim::vec std_dev_p(std::vector<Boid> const& flock);
+  two_dim::vec mean_velocity(std::vector<Boid> const& flock);
+  two_dim::vec std_dev_v(std::vector<Boid> const& flock);
 };
 
 }  // namespace birds
