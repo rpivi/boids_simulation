@@ -12,7 +12,6 @@ vec operator-(vec const& a, vec const& b);
 vec operator*(vec const& a, double const& b);
 vec operator/(vec const& a, int b);
 
-
 // norm and distance function
 double norm(vec const& p);
 

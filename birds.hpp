@@ -33,7 +33,6 @@ class Boid {
 
   void update_p(double delta_t);
 
-
   // toroidal space
   void borders();
 

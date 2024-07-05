@@ -11,7 +11,6 @@ int main() {
   double frame{60};
   double delta{1 / frame};
 
-
   // random generation
   std::random_device r;
   std::default_random_engine eng(r());
