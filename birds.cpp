@@ -166,6 +166,7 @@ two_dim::vec Flock::mean_position(std::vector<Boid> const& flock) {
   return mean_position_;
 }
 
+
 two_dim::vec Flock::std_dev_p(std::vector<Boid> const& flock) {
   two_dim::vec sum_p2{};
   sum_p2.x = std::accumulate(std::begin(flock), std::end(flock), double{0.},

@@ -12,6 +12,7 @@ vec operator/(vec const& a, int b) { return vec{a.x / b, a.y / b}; }
 // norm and distance function
 double norm(vec const& p) { return std::hypot(p.x, p.y); }
 
+
 double distance(vec const& p, vec const& otherp) {
   vec difference = p - otherp;
   return norm(difference);
