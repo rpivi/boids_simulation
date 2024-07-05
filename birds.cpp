@@ -5,9 +5,9 @@
 #include <iostream>
 #include <iterator>
 #include <numeric>
-#include <vector>
+//#include <vector>
 
-#include "twodimensional.hpp"
+//#include "twodimensional.hpp"
 
 namespace birds {
 // get parameters
