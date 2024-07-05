@@ -83,9 +83,9 @@ TEST_CASE("Testing the near function ") {
 }
 
 TEST_CASE("Testing the update_v and update_p functions") {
-  SUBCASE("assert"){
-    birds::Boid boid{0.,0.,0.,0.};
-    
+  SUBCASE("assert") {
+    birds::Boid boid{0., 0., 0., 0.};
+
     double delta{-1.};
     CHECK_THROWS(boid.update_p(delta));
   }
@@ -94,7 +94,7 @@ TEST_CASE("Testing the update_v and update_p functions") {
     two_dim::vec v2{0., 0.};
     two_dim::vec v3{0., 0.};
     birds::Boid p1{1., 1., 1., 1.};
-    double delta {1.};
+    double delta{1.};
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
     CHECK(p1.get_v().x == 1.);
@@ -403,7 +403,8 @@ TEST_CASE("testing the statistics functions") {
   }
   SUBCASE("test 3") {
     birds::Flock flock_statistic;
-    std::vector<birds::Boid> flock{{1., 2., 3., 4.}, {2., 3., 4., 5.},{3., 4., 5., 6.}};
+    std::vector<birds::Boid> flock{
+        {1., 2., 3., 4.}, {2., 3., 4., 5.}, {3., 4., 5., 6.}};
     CHECK(flock_statistic.mean_position(flock).x == 2.0);
     CHECK(flock_statistic.mean_position(flock).y == 3.0);
     CHECK(flock_statistic.std_dev_p(flock).x == doctest::Approx(0.57735));
