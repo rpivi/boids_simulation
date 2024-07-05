@@ -83,12 +83,18 @@ TEST_CASE("Testing the near function ") {
 }
 
 TEST_CASE("Testing the update_v and update_p functions") {
+  SUBCASE("assert"){
+    birds::Boid boid{0.,0.,0.,0.};
+    
+    double delta{-1.};
+    CHECK_THROWS(boid.update_p(delta));
+  }
   SUBCASE("simple test") {
     two_dim::vec v1{0., 0.};
     two_dim::vec v2{0., 0.};
     two_dim::vec v3{0., 0.};
     birds::Boid p1{1., 1., 1., 1.};
-    double delta = 1.;
+    double delta {1.};
     p1.update_v(v1, v2, v3);
     p1.update_p(delta);
     CHECK(p1.get_v().x == 1.);
