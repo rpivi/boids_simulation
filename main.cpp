@@ -53,13 +53,11 @@ int main() {
     // clear the window - background color blue as the sky
     window.clear(sf::Color(135, 206, 250));
 
-    // boids out of the window must come back - toroidal space
     for (auto& boid : flock) {
+      // boids out of the window must come back - toroidal space
       boid.borders();
-    }
 
-    // updating the flock
-    for (auto& boid : flock) {
+      // updating the flock
       boid.update_v(boid.separation(flock, s, d_s), boid.alignment(flock, a, d),
                     boid.cohesion(flock, c, d));
       boid.update_p(delta);
