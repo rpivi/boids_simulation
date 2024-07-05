@@ -23,6 +23,7 @@ int main() {
   double s{0.};
   double a{0.};
   double c{0.};
+
   birds::set_parameters(num_boids, d, d_s, s, a, c);
 
   // flock generarion

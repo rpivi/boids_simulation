@@ -5,7 +5,7 @@
 #include <iostream>
 #include <iterator>
 #include <numeric>
-
+#include <stdexcept>
 
 namespace birds {
 // get parameters
@@ -21,10 +21,14 @@ void set_parameters(double& num_boids, double& d, double& d_s, double& s,
   std::cin >> d_s;
   std::cout << "\n the separation parameter: ";
   std::cin >> s;
-  std::cout << "\n the allignement parameter: ";
+  std::cout << "\n the alignement parameter: ";
   std::cin >> a;
   std::cout << "\n the cohesion parameter: ";
   std::cin >> c;
+
+  if (num_boids < 0 || d < 0 || d_s < 0 || s < 0 || a < 0 || c < 0) {
+    throw std::runtime_error("Invalid parameter");
+  }
 }
 
 Boid::Boid(double posX, double posY, double velX, double velY)
@@ -54,7 +58,9 @@ void Boid::update_v(two_dim::vec const& v1, two_dim::vec const& v2,
 }
 
 void Boid::update_p(double delta_t) {
-  assert(delta_t > 0);
+  if (delta_t < 0) {
+    throw std::runtime_error("Invalid parameter");
+  }
   position_ = position_ + velocity_ * delta_t;
 }
 
