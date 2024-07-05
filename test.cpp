@@ -395,6 +395,18 @@ TEST_CASE("testing the statistics functions") {
     CHECK(flock_statistic.std_dev_v(flock).x == 0.5);
     CHECK(flock_statistic.std_dev_v(flock).y == 0.5);
   }
+  SUBCASE("test 3") {
+    birds::Flock flock_statistic;
+    std::vector<birds::Boid> flock{{1., 2., 3., 4.}, {2., 3., 4., 5.},{3., 4., 5., 6.}};
+    CHECK(flock_statistic.mean_position(flock).x == 2.0);
+    CHECK(flock_statistic.mean_position(flock).y == 3.0);
+    CHECK(flock_statistic.std_dev_p(flock).x == doctest::Approx(0.5774));
+    CHECK(flock_statistic.std_dev_p(flock).y == doctest::Approx(0.5774));
+    CHECK(flock_statistic.mean_velocity(flock).x == 4.0);
+    CHECK(flock_statistic.mean_velocity(flock).y == 5.0);
+    CHECK(flock_statistic.std_dev_v(flock).x == doctest::Approx(0.5774));
+    CHECK(flock_statistic.std_dev_v(flock).y == doctest::Approx(0.5774));
+  }
 }
 // test for twodimensional
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////
