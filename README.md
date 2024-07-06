@@ -1,2 +1,2 @@
 # boids_simulation
-This is a project for a university exam at Unibo. There is a pdf file in italian that can guide you throw the project. 
+The repository contains a project carried out for a university exam at Unibo. The project consists of a bird flight simulation written in C++. Craig Reynolds created the algorithm that was used in this project, in which the flock is an emergent behavior of single entities called Boids. The source code was divided into five files: main.cpp, birds.cpp, twodimensional.cpp, test.cpp and trianglesfml.cpp. In the repository there is a pdf file in Italian that will guide you through the code and explain how to compile and run the code and what inputs will be needed and what output will be generated from the execution.
