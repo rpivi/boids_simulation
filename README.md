@@ -1,2 +1,38 @@
-# boids_simulation
-The repository contains a project carried out for a university exam at Unibo. The project consists of a bird flight simulation written in C++. Craig Reynolds created the algorithm that was used in this project, in which the flock is an emergent behavior of single entities called Boids. The source code was divided into five files: main.cpp, birds.cpp, twodimensional.cpp, test.cpp and trianglesfml.cpp. In the repository there is a pdf file in Italian that will guide you through the code and explain how to compile and run the code and what inputs will be needed and what output will be generated from the execution.
+# Boid Simulation
+
+## Descrizione del progetto
+
+Questo progetto implementa una simulazione bidimensionale del volo di stormi basata sull'algoritmo di Craig Reynolds del 1986. Gli "boids" (dall'inglese "bird-oid objects") sono oggetti la cui interazione crea un comportamento emergente, rappresentando lo stormo. La simulazione include una visualizzazione grafica degli "boids" utilizzando la libreria SFML.
+
+### Tecnologie utilizzate
+- **Linguaggio**: C++
+- **Framework di visualizzazione**: [SFML](https://www.sfml-dev.org/)
+- **Sistema di Build**: [CMake](https://cmake.org/)
+
+## Struttura del progetto
+
+Il progetto è organizzato nei seguenti file:
+
+- **Codice Sorgente**
+  - `main.cpp`: Inizializzazione della simulazione e gestione dell'input utente.
+  - `birds.cpp`, `twodimensional.cpp`, `trianglesfml.cpp`: Contengono le definizioni delle classi e delle funzioni.
+  - Header files: `birds.hpp`, `twodimensional.hpp`, `trianglesfml.hpp`.
+
+- **Test**
+  - `test.cpp`: Contiene i test per verificare la correttezza delle funzioni principali utilizzando il framework Doctest.
+
+- **File di configurazione**
+  - `.clangformat`: Per la formattazione del codice.
+  - `.gitignore`: Per ignorare file non necessari nella repository.
+  - `CMakeLists.txt`: File di configurazione per la compilazione con CMake.
+
+## Compilazione ed Esecuzione
+
+### Requisiti
+- **CMake** 3.16 o superiore
+- **SFML** 2.5 o superiore
+
+### Istruzioni di Compilazione
+1. Creare una directory di build ed eseguire la configurazione:
+   ```bash
+   cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
