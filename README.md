@@ -32,7 +32,12 @@ Il progetto è organizzato nei seguenti file:
 - **CMake** 3.16 o superiore
 - **SFML** 2.5 o superiore
 
-### Istruzioni di Compilazione
-1. Creare una directory di build ed eseguire la configurazione:
+### Istruzioni di Compilazione ed Esecuzione
+I comandi per compilare ed eseguire:
    ```bash
    cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+   cmake --build build
+cd build
+./boids
+
+
