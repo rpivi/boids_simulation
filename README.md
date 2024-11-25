@@ -23,7 +23,6 @@ Il progetto è organizzato nei seguenti file:
 
 - **File di configurazione**
   - `.clangformat`: Per la formattazione del codice.
-  - `.gitignore`: Per ignorare file non necessari nella repository.
   - `CMakeLists.txt`: File di configurazione per la compilazione con CMake.
 
 ## Compilazione ed Esecuzione
