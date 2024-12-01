@@ -2,7 +2,9 @@
 
 ## Descrizione del progetto
 
-Questo progetto implementa una simulazione bidimensionale del volo di stormi basata sull'algoritmo di Craig Reynolds del 1986. I "boids" (dall'inglese "bird-oid objects") sono oggetti la cui interazione crea un comportamento emergente: lo stormo. La simulazione include una visualizzazione grafica dei "boids" utilizzando la libreria SFML.
+Questo progetto implementa una simulazione bidimensionale del volo di stormi basata sull'algoritmo di Craig Reynolds del 1986. I "boids" (dall'inglese "bird-oid objects") sono oggetti la cui interazione secondo 3 leggi (vedi figura) crea un comportamento emergente: lo stormo. La simulazione include una visualizzazione grafica dei "boids" utilizzando la libreria SFML.
+
+![le 3 leggi dei boids](./boids_laws.png)
 
 Per maggiori informazioni sul progetto,
 consultare la relazione riguandante il codice ed i risultati della simulazione reperibile in questa repository.
