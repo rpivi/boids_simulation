@@ -1,5 +1,8 @@
 # Boid Simulation
 
+**Autori**: Notarpietro Sabrina, Pivi Riccardo, Schirripa Mattia  
+**Data**: Novembre 2024  
+
 ## Descrizione del progetto
 
 Questo progetto implementa una simulazione bidimensionale del volo di stormi basata sull'algoritmo di Craig Reynolds del 1986. I "boids" (dall'inglese "bird-oid objects") sono oggetti la cui interazione segue 3 leggi (vedi figura), creando un comportamento emergente: lo stormo. La simulazione include una visualizzazione grafica dei "boids" utilizzando la libreria SFML.
