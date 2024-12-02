@@ -1,7 +1,7 @@
 # Boid Simulation
 
 **Autori**: Notarpietro Sabrina, Pivi Riccardo, Schirripa Mattia  
-**Data**: Novembre 2024  
+**Data**: Giugno 2024  
 
 ## Descrizione del progetto
 
