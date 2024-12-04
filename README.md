@@ -39,17 +39,21 @@ Il progetto è organizzato nei seguenti file:
 - **CMake** 3.16 o superiore
 - **SFML** 2.5 o superiore
 
-### Istruzioni di Compilazione ed Esecuzione
-I comandi per compilare ed eseguire:
-   ```bash
-   cmake -S . -B build -
-   ```bash
-DCMAKE_BUILD_TYPE=Release
-  ```bash
-   cmake --build build
- ```bash
-cd build
+# Istruzioni di Compilazione ed Esecuzione con CMake
+
+Per compilare ed eseguire il progetto, segui questi passaggi:
+
 ```bash
+# 1. Configura il progetto e genera i file di build
+cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+
+# 2. Compila il progetto
+cmake --build build
+
+# 3. Spostati nella directory di build
+cd build
+
+# 4. Esegui il file generato
 ./boids
 
 
