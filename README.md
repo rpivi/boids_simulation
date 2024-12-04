@@ -42,9 +42,14 @@ Il progetto è organizzato nei seguenti file:
 ### Istruzioni di Compilazione ed Esecuzione
 I comandi per compilare ed eseguire:
    ```bash
-   cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
+   cmake -S . -B build -
+   ```bash
+DCMAKE_BUILD_TYPE=Release
+  ```bash
    cmake --build build
+ ```bash
 cd build
+```bash
 ./boids
 
 
