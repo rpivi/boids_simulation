@@ -10,7 +10,7 @@ Questo progetto implementa una simulazione bidimensionale del volo di stormi bas
 ![le 3 leggi dei boids](./boids_laws.png)
 
 Per maggiori informazioni sul progetto,
-consultare la relazione riguandante il codice ed i risultati della simulazione reperibile in questa repository.
+consultare [la relazione](Relazione_di_Programmazione_Boid_Simulation_1__Anno_DIFA_UNIBO.pdf) riguandante il codice ed i risultati della simulazione reperibile in questa repository.
 
 ### Tecnologie utilizzate
 - **Linguaggio**: C++
