@@ -43,17 +43,21 @@ Il progetto è organizzato nei seguenti file:
 
 Per compilare ed eseguire il progetto, segui questi passaggi:
 
-```bash
+
 # 1. Configura il progetto e genera i file di build
+```bash
 cmake -S . -B build -DCMAKE_BUILD_TYPE=Release
 
 # 2. Compila il progetto
+```bash
 cmake --build build
 
 # 3. Spostati nella directory di build
+```bash
 cd build
 
 # 4. Esegui il file generato
+```bash
 ./boids
 
 
