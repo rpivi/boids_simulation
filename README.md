@@ -61,4 +61,5 @@ cd build
 ./boids
 ```
 # Risultati Grafici
-![](https://github.com/rpivi/boids_simulation/raw/main/Boid_graphics_1_-_online-video-cutter.com_.gif)
+
+![](https://raw.githubusercontent.com/rpivi/boids_simulation/main/Boid_graphics_1_-_online-video-cutter.com_.gif)
