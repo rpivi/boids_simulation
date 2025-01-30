@@ -60,4 +60,5 @@ cd build
 ```bash
 ./boids
 ```
-
+# Risultati Grafici
+![](Boid_graphics.webm)
