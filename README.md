@@ -61,4 +61,4 @@ cd build
 ./boids
 ```
 # Risultati Grafici
-![](Boid_graphics.webm)
+![](Boid_graphics.mp4)
